@@ -42,8 +42,8 @@ if(bloqueoUS){
             const allowedDomains = [
                 "https://canso30-11-lflooovariaaaoos.github.io/cvattv.html",
                 // "https://canso30-11-lflooovariaaaoos.github.io/cvattv.html",
-                "http://181.127.97.2",
-                "http://181.127.97.2"
+                "http://127.0.0.1:5500",
+                "http://127.0.0.1:5501"
             ];
 
             if (!iframeReferrer || !allowedDomains.some(domain => iframeReferrer.startsWith(domain))) {
@@ -55,7 +55,7 @@ if(bloqueoUS){
                 // Redirigir con el parámetro para que Histats lo registre
                 if (referrerEncoded !== "desconocido") {
                     // accesoPermitido = false;
-                    window.top.location.href = `https://canalesonline.netlify.app/?acceso=${referrerEncoded}`;
+                    window.top.location.href = `https://canso30-11-lflooovariaaaoos.github.io/cvattv.html?acceso=${referrerEncoded}`;
                     window.close();
                     window.location.href = "about:blank"; // Alternativa si el cierre falla
                 }
