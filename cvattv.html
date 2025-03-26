@@ -1,4 +1,83 @@
+<script>
+        let bloqueoUS = true;
+let bloquearDominio = true;
+let publicidad = false;
 
+
+
+if(bloqueoUS){
+    $.getJSON("https://directory.cookieyes.com/api/v1/ip", function (response) { 
+        if (response.country === "US") { 
+        // if (response.country === "AR") { 
+            // Borra todo el contenido de la página
+            document.body.innerHTML = ""; 
+            
+            // Evita que el usuario use el botón "Atrás"
+            history.pushState(null, null, location.href);
+    
+            // Redirige a una página en blanco
+            window.location.href = "about:blank"; 
+    
+            // Intenta cerrar la pestaña (solo funciona si fue abierta con window.open())
+            window.close();
+            setTimeout(() => { window.close(); }, 1000); 
+            
+            // Limpia la consola para dificultar inspección
+            
+            // Evita que el usuario edite la página con DevTools
+            console.clear();  
+            setInterval(() => {
+                document.body.innerHTML = "";
+                console.clear();
+            }, 100); // Se ejecuta cada 100ms para reforzar el bloqueo
+        }
+    });
+}
+
+
+(function () {
+    if (bloquearDominio) {
+        if (window.top !== window.self) {
+            const iframeReferrer = document.referrer;
+            const allowedDomains = [
+                "https://canalesonline.netlify.app",
+                // "https://server-canalesonline.netlify.app",
+                "http://127.0.0.1:5500",
+                "http://127.0.0.1:5501"
+            ];
+
+            if (!iframeReferrer || !allowedDomains.some(domain => iframeReferrer.startsWith(domain))) {
+                console.warn("Acceso denegado desde un origen no autorizado:", iframeReferrer);
+
+                // Codificar la URL del sitio que intentó usar el iframe
+                const referrerEncoded = encodeURIComponent(iframeReferrer || "desconocido");
+
+                // Redirigir con el parámetro para que Histats lo registre
+                if (referrerEncoded !== "desconocido") {
+                    // accesoPermitido = false;
+                    window.top.location.href = `https://canalesonline.netlify.app/?acceso=${referrerEncoded}`;
+                    window.close();
+                    window.location.href = "about:blank"; // Alternativa si el cierre falla
+                }
+            } else {
+                console.log("Iframe cargado desde un origen autorizado:", iframeReferrer);
+            }
+        } else {
+            console.log("La página no está dentro de un iframe. Acceso permitido.");
+        }
+    }
+})();
+
+
+
+if (publicidad) {
+    var uid = '484351';
+    var wid = '734958';
+    var pop_fback = 'up';
+    var pop_tag = document.createElement('script'); pop_tag.src = '//cdn.popcash.net/show.js'; document.body.appendChild(pop_tag);
+    pop_tag.onerror = function () { pop_tag = document.createElement('script'); pop_tag.src = '//cdn2.popcash.net/show.js'; document.body.appendChild(pop_tag) };
+}
+</script>       
 <style type="text/css">
         html,
         body {
