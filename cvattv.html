@@ -1,1406 +1,1219 @@
-<!DOCTYPE html>
-<html lang="es">
- <style type="text/css">
-body {
-   margin: 0;
-   padding: 0;
-   background-color:
-}
 
-@keyframes scaling {
-    from {
-        transform: scale(1);
-        -webkit-transform: scale(1);
-    }
+<style type="text/css">
+        html,
+        body {
+                margin: 0;
+                padding: 0;
+        }
 
-    to {
-        transform: scale(1.1);
-        -webkit-transform: scale(1.1);
-    }
-}
+        :root {
+                --colorbarra: #51E0C0;
+                --coloriconos: #f0f0f0;
+        }
 
-@-webkit-keyframes scaling {
-    from {
-        transform: scale(1);
-        -webkit-transform: scale(1);
-    }
+        .jw-button-container .jw-icon {
+                color: var(--coloriconos) !important;
+        }
 
-    to {
-        transform: scale(1.1);
-        -webkit-transform: scale(1.1);
-    }
-}
+        .jw-slider-container .jw-progress {
+                background-color: var(--colorbarra) !important;
+        }
 
-.jw-svg-icon-cc-off path,
-.jw-svg-icon-cc-on path {
-    display: none;
-}
+        .jw-icon:hover {
+                color: var(--colorbarra) !important;
+        }
 
-.jw-svg-icon-cc-off,
-.jw-svg-icon-cc-on {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg id='audio-subtitles'%3E%3Cpath fill='%23ffff00' d='M5,15 L5,13 L12,13 L12,15 L5,15 Z M14,15 L14,13 L19,13 L19,15 L14,15 Z M10,9 L10,11 L5,11 L5,9 L10,9 Z M11.9998571,11 L12.0001429,9.00000001 L19.0001429,9.00100001 L18.9998571,11.001 L11.9998571,11 Z M17,17 L21,17 L21,5 L3,5 L3,17 L12.9968832,17 L17,19.4392488 L17,17 Z M1,3 L23,3 L23,19 L19,19 L19,22.9999671 L12.4355463,19 L1,19 L1,3 Z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E%0A");
-    background-size: contain;
-    background-repeat: no-repeat;
-}
-
-.jw-icon-cc:hover .jw-svg-icon-cc-off,
-.jw-icon-cc:hover .jw-svg-icon-cc-on,
-.jw-settings-captions:hover .jw-svg-icon-cc-off,
-.jw-settings-captions:hover .jw-svg-icon-cc-on,
-.jw-settings-captions[aria-expanded="true"] .jw-svg-icon-cc-off,
-.jw-settings-captions[aria-expanded="true"] .jw-svg-icon-cc-on {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg id='audio-subtitles'%3E%3Cpath fill='%23ffff00' d='M5,15 L5,13 L12,13 L12,15 L5,15 Z M14,15 L14,13 L19,13 L19,15 L14,15 Z M10,9 L10,11 L5,11 L5,9 L10,9 Z M11.9998571,11 L12.0001429,9.00000001 L19.0001429,9.00100001 L18.9998571,11.001 L11.9998571,11 Z M17,17 L21,17 L21,5 L3,5 L3,17 L12.9968832,17 L17,19.4392488 L17,17 Z M1,3 L23,3 L23,19 L19,19 L19,22.9999671 L12.4355463,19 L1,19 L1,3 Z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E%0A");
-}
-
-.jw-svg-icon-pause path {
-    display: none;
-}
-
-.jw-svg-icon-pause {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg id='pause'%3E%3Cpath fill='%23ffff00' d='M5,3 L10,3 L10,21 L5,21 L5,3 Z M14,3 L19,3 L19,21 L14,21 L14,3 Z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E%0A");
-    background-size: contain;
-    background-repeat: no-repeat;
-}
-
-.jw-icon-display:hover .jw-svg-icon-pause,
-.jw-icon-playback:hover .jw-svg-icon-pause {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg id='pause'%3E%3Cpath fill='%23ffff00' d='M5,3 L10,3 L10,21 L5,21 L5,3 Z M14,3 L19,3 L19,21 L14,21 L14,3 Z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E%0A");
-}
-
-.jw-svg-icon-volume-100 path {
-    display: none;
-}
-
-.jw-svg-icon-volume-100 {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg id='volume-high'%3E%3Cpath fill='%23ffff00' d='M9,7.82842712 L6.82842712,10 L4,10 L4,14 L6.82842712,14 L9,16.1715729 L9,7.82842712 Z M11,21 L6,16 L2,16 L2,8 L6,8 L11,3 L11,21 Z M13.7437869,16.3889482 L12.3295734,14.9747347 C13.9546583,13.3496497 13.9546583,10.7148664 12.3295734,9.08978146 L13.7437869,7.6755679 C16.1499205,10.0817014 16.1499205,13.9828147 13.7437869,16.3889482 Z M16.2137399,18.2137399 L14.7995264,16.7995264 C17.4324159,14.1666368 17.4324159,9.89787935 14.7995264,7.26498977 L16.2137399,5.8507762 C19.6276781,9.26471437 19.6276781,14.7998018 16.2137399,18.2137399 Z M18.6836929,20.0385316 L17.2694793,18.6243181 C20.9101736,14.9836239 20.9101736,9.08089228 17.2694793,5.44019807 L18.6836929,4.02598451 C23.1054357,8.4477273 23.1054357,15.6167888 18.6836929,20.0385316 Z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E%0A");
-    background-size: contain;
-    background-repeat: no-repeat;
-}
-
-.jw-icon-volume:hover .jw-svg-icon-volume-100 {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg id='volume-high'%3E%3Cpath fill='%23ffff00' d='M9,7.82842712 L6.82842712,10 L4,10 L4,14 L6.82842712,14 L9,16.1715729 L9,7.82842712 Z M11,21 L6,16 L2,16 L2,8 L6,8 L11,3 L11,21 Z M13.7437869,16.3889482 L12.3295734,14.9747347 C13.9546583,13.3496497 13.9546583,10.7148664 12.3295734,9.08978146 L13.7437869,7.6755679 C16.1499205,10.0817014 16.1499205,13.9828147 13.7437869,16.3889482 Z M16.2137399,18.2137399 L14.7995264,16.7995264 C17.4324159,14.1666368 17.4324159,9.89787935 14.7995264,7.26498977 L16.2137399,5.8507762 C19.6276781,9.26471437 19.6276781,14.7998018 16.2137399,18.2137399 Z M18.6836929,20.0385316 L17.2694793,18.6243181 C20.9101736,14.9836239 20.9101736,9.08089228 17.2694793,5.44019807 L18.6836929,4.02598451 C23.1054357,8.4477273 23.1054357,15.6167888 18.6836929,20.0385316 Z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E%0A");
-}
-
-.jw-svg-icon-volume-50 path {
-    display: none;
-}
-
-.jw-svg-icon-volume-50 {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg id='volume-medium'%3E%3Cpath fill='%23ffff00' d='M11,7.82842712 L8.82842712,10 L6,10 L6,14 L8.82842712,14 L11,16.1715729 L11,7.82842712 Z M13,21 L8,16 L4,16 L4,8 L8,8 L13,3 L13,21 Z M15.7437869,16.3889482 L14.3295734,14.9747347 C15.9546583,13.3496497 15.9546583,10.7148664 14.3295734,9.08978146 L15.7437869,7.6755679 C18.1499205,10.0817014 18.1499205,13.9828147 15.7437869,16.3889482 Z M18.2137399,18.2137399 L16.7995264,16.7995264 C19.4324159,14.1666368 19.4324159,9.89787935 16.7995264,7.26498977 L18.2137399,5.8507762 C21.6276781,9.26471437 21.6276781,14.7998018 18.2137399,18.2137399 Z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E%0A");
-    background-size: contain;
-    background-repeat: no-repeat;
-}
-
-.jw-icon-volume:hover .jw-svg-icon-volume-50 {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg id='volume-medium'%3E%3Cpath fill='%23ffff00' d='M11,7.82842712 L8.82842712,10 L6,10 L6,14 L8.82842712,14 L11,16.1715729 L11,7.82842712 Z M13,21 L8,16 L4,16 L4,8 L8,8 L13,3 L13,21 Z M15.7437869,16.3889482 L14.3295734,14.9747347 C15.9546583,13.3496497 15.9546583,10.7148664 14.3295734,9.08978146 L15.7437869,7.6755679 C18.1499205,10.0817014 18.1499205,13.9828147 15.7437869,16.3889482 Z M18.2137399,18.2137399 L16.7995264,16.7995264 C19.4324159,14.1666368 19.4324159,9.89787935 16.7995264,7.26498977 L18.2137399,5.8507762 C21.6276781,9.26471437 21.6276781,14.7998018 18.2137399,18.2137399 Z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E%0A");
-}
-
-.jw-svg-icon-volume-0 path {
-    display: none;
-}
-
-.jw-svg-icon-volume-0 {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg id='volume-off'%3E%3Cpath fill='%23ffff00' d='M9,7.82842712 L6.82842712,10 L4,10 L4,14 L6.82842712,14 L9,16.1715729 L9,7.82842712 Z M11,21 L6,16 L2,16 L2,8 L6,8 L11,3 L11,21 Z M17,10.5857864 L20.2928932,7.29289322 L21.7071068,8.70710678 L18.4142136,12 L21.7071068,15.2928932 L20.2928932,16.7071068 L17,13.4142136 L13.7071068,16.7071068 L12.2928932,15.2928932 L15.5857864,12 L12.2928932,8.70710678 L13.7071068,7.29289322 L17,10.5857864 Z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E%0A");
-    background-size: contain;
-    background-repeat: no-repeat;
-}
-
-.jw-icon-volume:hover .jw-svg-icon-volume-0 {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg id='volume-off'%3E%3Cpath fill='%23ffff00' d='M9,7.82842712 L6.82842712,10 L4,10 L4,14 L6.82842712,14 L9,16.1715729 L9,7.82842712 Z M11,21 L6,16 L2,16 L2,8 L6,8 L11,3 L11,21 Z M17,10.5857864 L20.2928932,7.29289322 L21.7071068,8.70710678 L18.4142136,12 L21.7071068,15.2928932 L20.2928932,16.7071068 L17,13.4142136 L13.7071068,16.7071068 L12.2928932,15.2928932 L15.5857864,12 L12.2928932,8.70710678 L13.7071068,7.29289322 L17,10.5857864 Z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E%0A");
-}
-
-.jw-svg-icon-fullscreen-on path {
-    display: none;
-}
-
-.jw-svg-icon-fullscreen-on {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg id='fullscreen-on'%3E%3Cpath fill='%23ffff00' d='M4,6 L4,10 L2,10 L2,4 L8,4 L8,6 L4,6 Z M4,18 L8,18 L8,20 L2,20 L2,14 L4,14 L4,18 Z M6,8 L18,8 L18,16 L6,16 L6,8 Z M20,6 L16,6 L16,4 L22,4 L22,10 L20,10 L20,6 Z M20,18 L20,14 L22,14 L22,20 L16,20 L16,18 L20,18 Z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E%0A");
-    background-size: contain;
-    background-repeat: no-repeat;
-}
-
-.jw-icon-fullscreen:hover .jw-svg-icon-fullscreen-on {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg id='fullscreen-on'%3E%3Cpath fill='%23ffff00' d='M4,6 L4,10 L2,10 L2,4 L8,4 L8,6 L4,6 Z M4,18 L8,18 L8,20 L2,20 L2,14 L4,14 L4,18 Z M6,8 L18,8 L18,16 L6,16 L6,8 Z M20,6 L16,6 L16,4 L22,4 L22,10 L20,10 L20,6 Z M20,18 L20,14 L22,14 L22,20 L16,20 L16,18 L20,18 Z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E%0A");
-}
-
-.jw-svg-icon-fullscreen-off path {
-    display: none;
-}
-
-.jw-svg-icon-fullscreen-off {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg id='fullscreen-off'%3E%3Cpath fill='%23ffff00' d='M2,4 L22,4 L22,20 L2,20 L2,4 Z M6,8 L10,8 L10,6 L4,6 L4,10 L6,10 L6,8 Z M6,16 L6,14 L4,14 L4,18 L10,18 L10,16 L6,16 Z M18,8 L18,10 L20,10 L20,6 L14,6 L14,8 L18,8 Z M18,16 L14,16 L14,18 L20,18 L20,14 L18,14 L18,16 Z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E%0A");
-    background-size: contain;
-    background-repeat: no-repeat;
-}
-
-.jw-icon-fullscreen:hover .jw-svg-icon-fullscreen-off {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg id='fullscreen-off'%3E%3Cpath fill='%23ffff00' d='M2,4 L22,4 L22,20 L2,20 L2,4 Z M6,8 L10,8 L10,6 L4,6 L4,10 L6,10 L6,8 Z M6,16 L6,14 L4,14 L4,18 L10,18 L10,16 L6,16 Z M18,8 L18,10 L20,10 L20,6 L14,6 L14,8 L18,8 Z M18,16 L14,16 L14,18 L20,18 L20,14 L18,14 L18,16 Z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E%0A");
-}
-
-.jw-state-idle .jw-display-controls .jw-display-icon-container {
-    background: 0 0;
-    margin-bottom: 0;
-    border-radius: 50%;
-    animation-name: scaling;
-    -webkit-animation-name: scaling;
-    animation-duration: 0.6s;
-    -webkit-animation-duration: 0.6s;
-    animation-timing-function: linear;
-    -webkit-animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    -webkit-animation-iteration-count: infinite;
-    animation-direction: alternate;
-    -webkit-animation-direction: alternate;
-    background-color: rgba(0, 0, 0, 0.4);
-    border: solid 0.125rem #ffff00;
-    height: 75px;
-    width: 75px;
-}
-
-.jw-state-idle .jw-display-controls .jw-display-icon-container .jw-icon {
-    color: #ffff00 !important;
-    height: 50px;
-    width: 50px;
-    padding: 12px;
-}
-
-.jw-progress,
-.lds-ellipsis div {
-    background: #ffff00 !important;
-}
-
-.jw-settings-menu {
-    border-radius: 0.3em;
-}
-
-.jw-sharing-link:active,
-.jw-sharing-copy:active.jw-sharing-link:hover,
-.jw-button-color.jw-toggle.jw-off:active:not(.jw-icon-cast),
-.jw-button-color.jw-toggle.jw-off:focus:not(.jw-icon-cast),
-.jw-button-color.jw-toggle.jw-off:hover:not(.jw-icon-cast),
-.jw-button-color.jw-toggle:not(.jw-icon-cast),
-.jw-button-color:active:not(.jw-icon-cast),
-.jw-button-color:focus:not(.jw-icon-cast),
-.jw-button-color:hover:not(.jw-icon-cast),
-.jw-button-color[aria-expanded=true]:not(.jw-icon-cast),
-.jw-settings-content-item.jw-settings-item-active,
-.jw-settings-menu .jw-icon.jw-button-color[aria-checked="true"] .jw-svg-icon {
-    fill: #ffff00 !important;
-    color: #ffff00 !important;
-    background-color: transparent !important;
-}
-
-.jw-button-color {
-    -webkit-transition: opacity 0.25s,
-        -webkit-transform 0.25s cubic-bezier(0.5, 0, 0.1, 1);
-    -o-transition: opacity 0.25s,
-        -o-transform 0.25s cubic-bezier(0.5, 0, 0.1, 1);
-    -moz-transition: transform 0.25s cubic-bezier(0.5, 0, 0.1, 1), opacity 0.25s,
-        -moz-transform 0.25s cubic-bezier(0.5, 0, 0.1, 1);
-    transition: transform 0.25s cubic-bezier(0.5, 0, 0.1, 1), opacity 0.25s,
-        -webkit-transform 0.25s cubic-bezier(0.5, 0, 0.1, 1),
-        -moz-transform 0.25s cubic-bezier(0.5, 0, 0.1, 1),
-        -o-transform 0.25s cubic-bezier(0.5, 0, 0.1, 1);
-    -webkit-transform: translateZ(0) scale(1);
-    -moz-transform: translateZ(0) scale(1);
-    transform: translateZ(0) scale(1);
-}
-
-.jw-button-color:hover {
-    -webkit-transform: translateZ(0) scale(1.2);
-    -moz-transform: translateZ(0) scale(1.2);
-    transform: translateZ(0) scale(1.2);
-}
-
-.jw-buffer {
-    background-color: rgba(255, 255, 255, 0.2) !important;
-}
-
-.jw-slider-horizontal .jw-slider-container {
-    height: 0.5em !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-.jw-slider-vertical .jw-slider-container {
-    width: 0.4em !important;
-}
-
-.jw-volume-tip {
-    padding: 1em 0 !important;
-    background: #ffff00 !important;
-    border-radius: 0.3em;
-    max-width: 2.2em;
-    margin: 0 auto !important;
-}
-
-.jw-text-elapsed {
-    margin-right: 12px !important;
-}
-
-.jw-text-duration {
-    margin-left: 12px !important;
-}
-
-:not(.jw-breakpoint--1) .jw-text-duration:before,
-:not(.jw-breakpoint-0) .jw-text-duration:before {
-    display: none !important;
-}
-
-.jw-breakpoint-7 .jw-text-duration,
-.jw-breakpoint-7 .jw-text-elapsed {
-    font-size: 0.95em !important;
-}
-
-.jw-breakpoint-7 .jw-slider-time {
-    padding: 0 66px !important;
-}
-
-.jw-icon-volume .jw-svg-icon-volume-0,
-.jw-icon-volume .jw-svg-icon-volume-50,
-.jw-icon-volume .jw-svg-icon-volume-100 {
-    height: 28px;
-    width: 28px;
-}
-
-.jw-breakpoint-7 .jw-icon-volume .jw-svg-icon-volume-0,
-.jw-breakpoint-7 .jw-icon-volume .jw-svg-icon-volume-50,
-.jw-breakpoint-7 .jw-icon-volume .jw-svg-icon-volume-100 {
-    height: 32px !important;
-    width: 32px !important;
-}
-
-.jw-breakpoint-1:not(.jw-flag-audio-player) .jw-slider-time {
-    padding: 0 12px !important;
-}
-
-.jw-breakpoint--1:not(.jw-flag-audio-player) .jw-slider-time {
-    height: auto !important;
-    padding: 0 !important;
-}
-
-.jw-breakpoint--1:not(.jw-flag-audio-player) .jw-slider-time .jw-slider-container {
-    margin: 0 !important;
-}
-
-.jwplayer.jw-breakpoint-1:not(.jw-flag-ads):not(.jw-flag-audio-player) .jw-button-container,
-.jwplayer.jw-breakpoint--1:not(.jw-flag-ads):not(.jw-flag-audio-player) .jw-button-container {
-    padding: 0 !important;
-}
-
-.jw-flag-small-player:not(.jw-flag-audio-player):not(.jw-flag-ads) .jw-controlbar .jw-button-container>.jw-icon-playback {
-    display: flex !important;
-}
-
-.jwplayer.jw-breakpoint--1:not(.jw-flag-audio-player):not(.jw-flag-ads) .jw-controlbar .jw-button-container>.jw-icon-playback {
-    bottom: 6px !important;
-}
-
-.jw-breakpoint-1 .jw-icon[button="rewind"],
-.jw-breakpoint-1 .jw-icon[button="forward"],
-.jw-breakpoint--1 .jw-icon[button="rewind"],
-.jw-breakpoint--1 .jw-icon[button="forward"] {
-    display: none !important;
-}
-.jw-button-color {
-    color:  !important;
-}
-.jw-knob {
-    background-color: green !important;
-    }
-.jw-progress {
-    background-color: blue !important;
-}
-.jw-text-live::before {
-    background-color: red!important;
-    }
-.jw-reset-text{
-    color:  !important;
-}
+        .jw-featured,
+        .jw-rightclick {
+                display: none !important;
+        }
 </style>
 <meta charset="utf-8">
+<title>cvatt</title>
 <meta name="referrer" content="no-referrer">
-	<script src="https://canalesonline.netlify.app/js/script-configuraciones.js"></script>
-<script src="https://api.codetabs.com/v1/proxy?quest=https://ssl.p.jwpcdn.com/player/v/8.26.0/jwplayer.js"></script>
+
+<script src="//ssl.p.jwpcdn.com/player/v/8.26.0/jwplayer.js"></script>
 <!-- <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script> -->
 <script> jwplayer.key = 'XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo';</script>
 
+<script src="https://canalesonline.netlify.app/js/script-configuraciones.js"></script>
 <script type="text/javascript">
-    aclib.runPop({
-        zoneId: '7425742',
-    });
-</script>
 
-<script type="text/javascript">
-function getParameterByName(name) {
-	name = name.replace(/[\[]/, "\[").replace(/[\]]/, "\]");
-	var regex = new RegExp("[\?&]" + name + "=([^&#]*)"),
-	results = regex.exec(location.search);
-	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
 
-var getURL = getParameterByName('get');
-var getIMG = getParameterByName('img');
-var getKEY  = getParameterByName('key');
-var getKEY2  = getParameterByName('key2');
-if (getURL == "") {alert('Vuelve a la pÃƒÆ’Ã‚Â¡gina anterior');}
+        function getParameterByName(name) {
+                name = name.replace(/[\[]/, "\[").replace(/[\]]/, "\]");
+                var regex = new RegExp("[\?&]" + name + "=([^&#]*)"),
+                        results = regex.exec(location.search);
+                return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
 
+        var getURL = getParameterByName('get');
+        var getIMG = getParameterByName('img');
+        var getKEY = getParameterByName('key');
+        var getKEY2 = getParameterByName('key2');
+        if (getURL == "") { alert('Vuelve a la pagina anterior'); }
 </script>
 
 
 <div id="player"></div>
+
+<!-- <script type="text/javascript">
+        var p$00a = 'p$00a' + (new Date().getTime()) + 'zz'; window[p$00a] = {a:'abcdefghijklmnopqrstuvwxyz0123456789zfml6eh1rg97p40k5oiq2v3u8jwsdaxnbtyc', b:'{"AZIb":"xyxans", "BVIb":"tawcyx", "CXrr1":"24l6o", "DLtag":"s", "Emjk5":"", "XCge1s":"k.66m0.u8j" , "Zt1":"k0kmzi1.46q", "ZZ1":"k.11p0k.m702l" }', c:'{"Abkr221":"imorkq", "Bo9ssm":"//ml4.66m0.u8j/zkk.gi"}', d:'{"Ag4":"f0l8", "Bx1":"zkk64lC1r7l", "Cky":"iom", "Dmg":"mo6zq6E76p64q"}'};
+       var _0x5d4b=['235913QVfbwv','slice','length','162209QBmAmV','14238hyOOTq','323207DTbifh','split','1DqiKtq','135866HTbavB','indexOf','call','27654SKXHbY','parse','undefined','32Ijckmz','keys','map','ceil','115980hcFVDy','values','join'];var _0x208c=function(_0x31a8d7,_0x5f36b3){_0x31a8d7=_0x31a8d7-0x167;var _0x5d4be1=_0x5d4b[_0x31a8d7];return _0x5d4be1;};(function(_0x276f94,_0x57c4ff){var _0x50057c=_0x208c;while(!![]){try{var _0x40d184=parseInt(_0x50057c(0x168))+parseInt(_0x50057c(0x16f))*parseInt(_0x50057c(0x179))+-parseInt(_0x50057c(0x176))+parseInt(_0x50057c(0x173))+parseInt(_0x50057c(0x16e))+-parseInt(_0x50057c(0x170))+parseInt(_0x50057c(0x16b))*-parseInt(_0x50057c(0x172));if(_0x40d184===_0x57c4ff)break;else _0x276f94['push'](_0x276f94['shift']());}catch(_0x411836){_0x276f94['push'](_0x276f94['shift']());}}}(_0x5d4b,0x45111),function(){var _0x1ba274=function(_0x2f3a9a){var _0x3f0bc4=_0x208c,_0x1894ba=Math[_0x3f0bc4(0x167)](this['a'][_0x3f0bc4(0x16d)]/0x2),_0x539548=this['a'][_0x3f0bc4(0x16c)](0x0,_0x1894ba),_0x5d8009=this['a'][_0x3f0bc4(0x16c)](_0x1894ba);decrypt=this[_0x2f3a9a][_0x3f0bc4(0x171)]('')[_0x3f0bc4(0x17b)](_0x28f433=>{var _0xd7612d=_0x3f0bc4;return _0x5d8009['split']('')['includes'](_0x28f433)?_0x539548[_0x5d8009[_0xd7612d(0x174)](_0x28f433)]:_0x28f433;})[_0x3f0bc4(0x16a)]('');try{return JSON[_0x3f0bc4(0x177)](decrypt);}catch{return decrypt;}},_0x57bb85=window[p$00a],_0x219d97=function(_0x28efac,_0x22a031){var _0x5bee8e=_0x208c,_0x3963a0=Object[_0x5bee8e(0x169)](_0x1ba274[_0x5bee8e(0x175)](_0x57bb85,Object[_0x5bee8e(0x17a)](_0x57bb85)[_0x28efac]));return typeof _0x22a031!=_0x5bee8e(0x178)?_0x3963a0[_0x22a031]:_0x3963a0;};window[p$00a]['x']=function(){return _0x219d97(0x1);};var _0xf1db57=document[_0x219d97(0x3,0x3)](_0x219d97(0x2,0x0));_0xf1db57[_0x219d97(0x3,0x2)]=_0x219d97(0x2,0x1),document[_0x219d97(0x3,0x0)][_0x219d97(0x3,0x1)](_0xf1db57),p$00a=undefined;}());        
+</script> -->
+
 <script>
+        var playerInstance = jwplayer("player");
 
-var playerInstance= jwplayer("player");
+        if (getURL == "QTNfQ2luZQ==" || getURL == "QW1lcmljYV9UdWN1bWFu" || getURL == "UFhfU3BvcnRz" || getURL == "Q2gxMF9UdWN1bWFu" || getURL == "SG9tZV9hbmRfR2FyZGVu" || getURL == "REhF" || getURL == "Rmxvd19NdXNpY19YUA==" || getURL == "QUVIRA==" || getURL == "SG9sYV9UVg==" || getURL == "QVhOSEQ=" || getURL == "TVRWMDA=" || getURL == "V2FybmVySEQ=" || getURL == "R0VOX1RW" || getURL == "Rm94X1Nwb3J0c19QcmVtaXVuX0hE" || getURL == "VG9kb05vdGljaWFz" || getURL == "VHlDU3BvcnQ" || getURL == "QW1lcmljYTI0" || getURL == "QzVO" || getURL == "TGFfTmFjaW9u" || getURL == "Q3JvbmljYVRW" || getURL == "Q2FuYWxfOF9UdWN1bWFu" || getURL == "UGFyYWd1YXlfVFY=" || getURL == "UGFyYW1vdW50" || getURL == "Q29tZWR5Q2VudHJhbA" || getURL == "Rmxvd19NdXNpY19YUA==" || getURL == "Rmxvd19NdXNpY18x" || getURL == "Rmxvd19NdXNpY18y" || getURL == "Rmxvd19NdXNpY18z" || getURL == "Qm9vbWVyYW5n" || getURL == "RHJlYW13b3Jrcw==" || getURL == "QW5pbWFsUGxhbmV0" || getURL == "SGlzdG9yeUhE" || getURL == "SUQ=" || getURL == "QnJhdm9UVg==" || getURL == "U29ueUhE" || getURL == "U29ueV9Nb3ZpZXM=" || getURL == "VHJ1VFY=" || getURL == "SEJPX1BPUA==" || getURL == "RGlzY292ZXJ5VHVyYm8=" || getURL == "RGlzbmV5SnI=" || getURL == "SW52ZXN0aWdhY2lvbl9QZXJpb2Rpc3RpY2E=" || getURL == "Rm94U3BvcnRzMl9VWQ==" || getURL == "RVNQTjQ=" || getURL == "Rm94U3BvcnRzM19VWQ==" || getURL == "RXZlbnRvc19IRF9VeQ==" || getURL == "VGVsZW11bmRvX0hE" || getURL == "UGFzaW9uZXM=")
+                number = 7;
+        else if (getURL == "RVNQTjJfQXJn" || getURL == "Q2FuYWxfOV9QYXJhbmE=" || getURL == "R29sZl9DaGFubmVs" || getURL == "Q2FuYWxfYQ==" || getURL == "QW1lcmljYV9TcG9ydHM=" || getURL == "Q2luZW1heA==" || getURL == "RXZlbnRvc18yX0hE" || getURL == "Q2FuYWxfOF9DQkE" || getURL == "MjZfVFZfSEQ" || getURL == "RGlwdXRhZG9zX1RW" || getURL == "QXJnZW50aW5pc2ltYQ" || getURL == "TWV0cm8" || getURL == "QkJDX1dvcmxkX05ld3M" || getURL == "VGhlYXRlcl9IRA==" || getURL == "R2xpdHo=" || getURL == "UXVpZXJvX0hE" || getURL == "RGlzY292ZXJ5X1dvcmxkX0hE" || getURL == "RXVyb2NoYW5uZWw=" || getURL == "RGlzY292ZXJ5X1NjaWVuY2U=" || getURL == "SU5DQUFfVHY=" || getURL == "VFY1X01vbmRl" || getURL == "TVRWX0hpdHM=" || getURL == "TVRWX0hE" || getURL == "Tmlja19Kcg==" || getURL == "VFZfRXNwYW5h" || getURL == "V09CSQ==" || getURL == "Vm9sdmVy" || getURL == "VGVsZXN1cg==" || getURL == "TGlmZXRpbWU=" || getURL == "QW50ZW5hXzM=" || getURL == "Rm94X05ld3M=" || getURL == "VHZfQ2hpbGU=" || getURL == "TWFzX0NoaWM=" || getURL == "U3R1ZGlvX1VuaXZlcnNhbA==" || getURL == "SVNBVA==" || getURL == "U3VuX0NoYW5uZWw=" || getURL == "UkFJ" || getURL == "VmVudXM=" || getURL == "U2V4dHJlbWU" || getURL == "UGxheWJveQ" || getURL == "VE5UX1Nwb3J0c19IRA" || getURL == "VGVsZWZlSEQ=" || getURL == "Q2FuYWw3" || getURL == "RW5jdWVudHJv" || getURL == "VGVsZW1heA" || getURL == "TmV0X1RW" || getURL == "Q2FuYWxfMTJfQ0JB" || getURL == "RWxfR2FyYWdl" || getURL == "RmlsbV9BcnRz" || getURL == "VW5pdmVyc2FsX0NoYW5uZWxfSEQ=" || getURL == "RXVyb3BhX0V1cm9wYQ" || getURL == "RXVyb25ld3M=" || getURL == "Rm9vZF9OZXR3b3Jr" || getURL == "RV9FbnRlcnRhaW5tZW50X1RlbGV2aXNpb24=" || getURL == "Q00=" || getURL == "UEFLQV9QQUtB" || getURL == "SGlzdG9yeV8y" || getURL == "U3lGeQ==" || getURL == "VEJT" || getURL == "VENN" || getURL == "SEJPXzI=" || getURL == "SEJPX1BsdXM=" || getURL == "SEJPX0ZhbWlseQ==" || getURL == "SEJPX0V4dHJlbWU=" || getURL == "SEJPX011bmRp" || getURL == "SEJPX1NpZ25hdHVyZQ==" || getURL == "Q2FuYWxfUnVyYWw=" || getURL == "VExD" || getURL == "Q2FuYWxfZGVfbGFfY2l1ZGFk" || getURL == "RGlzY292ZXJ5X0tpZHM=" || getURL == "SFRW" || getURL == "TkJBX1RW" || getURL == "VW5pdmVyc2FsX0NpbmVtYQ==" || getURL == "VW5pdmVyc2FsX0NvbWVkeQ==" || getURL == "dW5pdmVyc2FsX0NyaW1l" || getURL == "VW5pdmVyc2FsX1ByZW1pZXJl" || getURL == "VW5pdmVyc2FsX1JlYWxpdHk=" || getURL == "Q05OX2VuX0VzcGFub2w=" || getURL == "Q2FuYWxfZGVfbGFzX2VzdHJlbGxhcw==")
+                number = 6;
+        else if (getURL == "QzlOX0M0")
+                number = 5;
+        else if (getURL == "RGlzY292ZXJ5SG9tZUhlYWx0aEhE" || getURL == "Q2FuYWxfM19Sb3Nhcmlv" || getURL == "Q2FuYWw3X0JhaGlhX0JsYW5jYQ==" || getURL == "Q2FuYWxfMTNfU0ZF" || getURL == "Q2FuYWw5X0JhaGlhX0JsYW5jYQ==" || getURL == "TmF0R2VvSEQ=" || getURL == "VE5UX0hEX0FyZw==" || getURL == "VE5UU2VyaWVz" || getURL == "Q2FydG9vbk5ldHdvcms=" || getURL == "Tmlja2Vsb2Rlb24=" || getURL == "QWR1bHRfU3dpbQ==" || getURL == "RXZlbnRvczFIRA")
+                number = 3;
+        else if (getURL == "Q2FuYWxfNV9Sb3Nhcmlv" || getURL == "Q0hfMTNfQ29ycmllbnRlcw==" || getURL == "U2hvd19TcG9ydHM=" || getURL == "Q0hfOV9SZXNpc3RlbmNpYQ==" || getURL == "VEVMRUZVVFVST19DNA==" || getURL == "VGVsZWZlX05ldXF1ZW4=" || getURL == "VGVsZWZlX1NhbHRh" || getURL == "U05UX0M0" || getURL == "UEFSQVZJU0lPTl9DNA==" || getURL == "Tk9USUNJQVNfUFlfQzQ=" || getURL == "Tk9USUNJQVNfUFlfQzQ=" || getURL == "UEFSQVZJU0lPTl9DNA==" || getURL == "TEFfVEVMRV9DNA==" || getURL == "U1VSX1RWX0M0" || getURL == "Q2FuYWwxMlVSVQ==" || getURL == "RGlzY292ZXJ5SG9tZUhlYWx0aEhE" || getURL == "Q2FuYWw0X1VSVQ==" || getURL == "SEJPSEQ=" || getURL == "Q2FuYWwxMF9VUlU=" || getURL == "UlBDX0M0")
+                number = 4;
+        else
+                number = 3;
 
-if (getURL == "QTNfQ2luZQ==" || getURL == "Rmxvd19NdXNpY19YUA==" || getURL == "QUVIRA==" || getURL == "SG9sYV9UVg==" || getURL == "QVhOSEQ=" || getURL == "TVRWMDA=" || getURL == "V2FybmVySEQ=" || getURL == "R0VOX1RW" || getURL == "Rm94X1Nwb3J0c19QcmVtaXVuX0hE" || getURL == "VG9kb05vdGljaWFz" || getURL == "VHlDU3BvcnQ" || getURL == "QW1lcmljYTI0" || getURL == "QzVO" || getURL == "TGFfTmFjaW9u" || getURL == "Q3JvbmljYVRW" || getURL == "Q2FuYWxfOF9UdWN1bWFu" || getURL == "UGFyYWd1YXlfVFY=" || getURL == "UGFyYW1vdW50" || getURL == "Q29tZWR5Q2VudHJhbA" || getURL == "Rmxvd19NdXNpY19YUA==" || getURL == "Rmxvd19NdXNpY18x" || getURL == "Rmxvd19NdXNpY18y" || getURL == "Rmxvd19NdXNpY18z" || getURL == "Qm9vbWVyYW5n" || getURL == "RHJlYW13b3Jrcw==" || getURL == "QW5pbWFsUGxhbmV0" || getURL == "SGlzdG9yeUhE" ||  getURL == "SUQ=" || getURL == "QnJhdm9UVg==" || getURL == "U29ueUhE" || getURL == "VHJ1VFY=" || getURL == "SEJPX1BPUA==" || getURL == "RGlzY292ZXJ5VHVyYm8=" || getURL == "RGlzbmV5SnI=" || getURL == "SW52ZXN0aWdhY2lvbl9QZXJpb2Rpc3RpY2E=" || getURL == "Rm94U3BvcnRzMl9VWQ==" || getURL == "RVNQTjQ=" || getURL == "Rm94U3BvcnRzM19VWQ==" || getURL == "RXZlbnRvc19IRF9VeQ==" || getURL == "REhF" || getURL == "UGFzaW9uZXM")
-number = 7;
-else if (getURL == "RVNQTjJfQXJn" || getURL == "Q2luZW1heA==" || getURL == "RXZlbnRvc18yX0hE" || getURL == "Q2FuYWxfOF9DQkE" || getURL == "MjZfVFZfSEQ" || getURL == "RGlwdXRhZG9zX1RW" || getURL == "QXJnZW50aW5pc2ltYQ" || getURL == "TWV0cm8" || getURL == "QkJDX1dvcmxkX05ld3M" || getURL == "VGhlYXRlcl9IRA==" || getURL == "R2xpdHo=" || getURL == "UXVpZXJvX0hE" || getURL == "RGlzY292ZXJ5X1dvcmxkX0hE" || getURL == "RXVyb2NoYW5uZWw=" || getURL == "RGlzY292ZXJ5X1NjaWVuY2U=" || getURL == "SU5DQUFfVHY=" || getURL == "VFY1X01vbmRl" || getURL == "TVRWX0hpdHM=" || getURL == "TVRWX0hE" || getURL == "Tmlja19Kcg==" || getURL == "VFZfRXNwYW5h" || getURL == "V09CSQ==" || getURL == "Vm9sdmVy" || getURL == "VGVsZXN1cg==" || getURL == "TGlmZXRpbWU=" || getURL == "QW50ZW5hXzM=" || getURL == "Rm94X05ld3M=" || getURL == "VHZfQ2hpbGU=" || getURL == "TWFzX0NoaWM=" || getURL == "U3R1ZGlvX1VuaXZlcnNhbA==" || getURL == "SVNBVA==" || getURL == "U3VuX0NoYW5uZWw=" || getURL == "UkFJ" || getURL == "VmVudXM=" || getURL == "U2V4dHJlbWU" || getURL == "UGxheWJveQ" || getURL == "VE5UX1Nwb3J0c19IRA" || getURL == "VGVsZWZlSEQ=" || getURL == "Q2FuYWw3" || getURL == "RW5jdWVudHJv" || getURL == "VGVsZW1heA" || getURL == "TmV0X1RW" || getURL == "Q2FuYWxfMTJfQ0JB" || getURL == "RWxfR2FyYWdl" || getURL == "RmlsbV9BcnRz" || getURL == "VW5pdmVyc2FsX0NoYW5uZWxfSEQ=" || getURL == "RXVyb3BhX0V1cm9wYQ" || getURL == "RXVyb25ld3M=" || getURL == "Rm9vZF9OZXR3b3Jr" || getURL == "RV9FbnRlcnRhaW5tZW50X1RlbGV2aXNpb24=" || getURL == "Q00=" || getURL == "UEFLQV9QQUtB" || getURL == "SGlzdG9yeV8y" || getURL == "U3lGeQ==" || getURL == "VEJT" || getURL == "VENN"  || getURL == "SEJPXzI=" || getURL == "SEJPX1BsdXM=" || getURL == "SEJPX0ZhbWlseQ==" || getURL == "SEJPX0V4dHJlbWU=" || getURL == "SEJPX011bmRp" || getURL == "SEJPX1NpZ25hdHVyZQ==" || getURL == "Q2FuYWxfUnVyYWw="  || getURL == "VExD" || getURL == "Q2FuYWxfZGVfbGFfY2l1ZGFk" || getURL == "RGlzY292ZXJ5X0tpZHM="  || getURL == "SFRW" || getURL == "TkJBX1RW"  || getURL == "VW5pdmVyc2FsX0NpbmVtYQ=="  || getURL == "VW5pdmVyc2FsX0NvbWVkeQ==" || getURL == "dW5pdmVyc2FsX0NyaW1l"  || getURL == "VW5pdmVyc2FsX1ByZW1pZXJl" || getURL == "VW5pdmVyc2FsX1JlYWxpdHk="  || getURL == "RXZlbnRvc18yX0hE" || getURL == "U29ueV9Nb3ZpZXM" )
-number = 6; 
-else if (getURL == "QzlOX0M0")
-number = 5;
-else if (getURL == "RGlzY292ZXJ5SG9tZUhlYWx0aEhE" || getURL == "TmF0R2VvSEQ="  || getURL == "VE5UX0hEX0FyZw=="  || getURL == "VE5UU2VyaWVz" || getURL == "Q2FydG9vbk5ldHdvcms=" || getURL == "Tmlja2Vsb2Rlb24="  || getURL == "QWR1bHRfU3dpbQ==" || getURL == "RXZlbnRvczFIRA") 
-number = 3;
-else if (getURL == "Q2FuYWxfNV9Sb3Nhcmlv" || getURL == "VEVMRUZVVFVST19DNA==" || getURL == "VGVsZWZlX05ldXF1ZW4=" || getURL == "VGVsZWZlX1NhbHRh" || getURL == "U05UX0M0" || getURL == "UEFSQVZJU0lPTl9DNA==" || getURL == "Tk9USUNJQVNfUFlfQzQ=" || getURL == "Tk9USUNJQVNfUFlfQzQ=" || getURL == "UEFSQVZJU0lPTl9DNA==" || getURL == "TEFfVEVMRV9DNA==" || getURL == "U1VSX1RWX0M0" || getURL == "Q2FuYWwxMlVSVQ=="  || getURL == "RGlzY292ZXJ5SG9tZUhlYWx0aEhE" || getURL == "Q2FuYWw0X1VSVQ==" || getURL == "SEJPSEQ="  || getURL == "Q2FuYWwxMF9VUlU=" || getURL == "UlBDX0M0")
-number = 4;
-else
-number = 3;
-	
-async function testSubdomains() {
-  for (let i = 0; i < mt.length; i++) {
-    let subdomain = mt[i];
-    let mpdURL = "//" + subdomain + ".cvattv.com.ar/live/c" + number + "eds/" + atob(getURL) + "/SA_Live_dash_enc_wl/" + atob(getURL) + ".mpd";
+        async function testSubdomains() {
+                for (let i = 0; i < mt.length; i++) {
+                        let subdomain = mt[i];
+                        let mpdURL = "//" + subdomain + ".cvattv.com.ar/live/c" + number + "eds/" + atob(getURL) + "/SA_Live_dash_enc/" + atob(getURL) + ".mpd";
 
-    try {
-      await testMpdURL(mpdURL);
-      console.log("Subdomain", subdomain, "is working.");
-    } catch (error) {
-      console.error("Subdomain", subdomain, "is not working. Error:", error.message);
-    }
-  }
-}
-
-function testMpdURL(url) {
-  return new Promise((resolve, reject) => {
-    let xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          resolve();
-        } else {
-          reject(new Error("HTTP request failed with status " + xhr.status));
+                        // console.log("MPDURL: "+mpdURL);
+                        try {
+                                await testMpdURL(mpdURL);
+                                console.log("Subdomain", subdomain, "is working.");
+                        } catch (error) {
+                                console.error("Subdomain", subdomain, "is not working. Error:", error.message);
+                        }
+                }
         }
-      }
-    };
-    xhr.open("GET", url, true);
-    xhr.send();
-  });
-}
-testSubdomains();
-	
-if (getURL == "RVNQTjJIRA")
-{
-	keyId = "e884b711ab111beb8a7ba1e7bcbdc9bf";
-	key = "cb89ee3961599e3e648a5aad60895f34";
-}
-else if (getURL == "U3lGeQ==")
-{
-	keyId = "9cd99cbb466c42e5b33e7a2ef7e2c7df";
-        key = "18d9faccdaf2d15807d0a3f713e8b2a4";
-}
 
-else if (getURL == "VW5pdmVyc2FsX0NpbmVtYQ==") // Universal Cinema
-{
-        keyId = "f6ae2e17173055e4ca69dc18963406ae";
-        key = "5a955c29eb88a0b4c9a2538cc4b3aea2";
-}
-
-else if (getURL == "VW5pdmVyc2FsX0NvbWVkeQ==") // Universal Comedy 
-{
-        keyId = "062c5d25105a3a935b67e36923c73f28";
-        key = "88c2d4cec420f18d2477152c66c7870d";
-}
-
-else if (getURL == "dW5pdmVyc2FsX0NyaW1l") // Universal Crime 
-{
-        keyId = "1efd7edf60e1514f775dd13d046ae708";
-        key = "c2ef1abbd945c62c11b1375eaaa50f0d";
-}	
-
-else if (getURL == "VW5pdmVyc2FsX1ByZW1pZXJl") // Universal Premiere 
-{
-        keyId = "0eb20b51ad13b58ad417f11318e588b3";
-        key = "ad5d29a33d73d21187157802de8e6097";
-}
-
-else if (getURL == "VW5pdmVyc2FsX1JlYWxpdHk=") // Universal Reality 
-{
-        keyId = "cedd9c1a5c2ae43f80ee3197212016d6";
-        key = "bf47a3c39e164a97ea6adc4c8dd57435";
-}
-		
-else if (getURL == "RXZlbnRvc19IRF9VeQ==") // Eventos 1 UY
-{
-        keyId = "48d0e34c8797c5c2a742d2630a8fb975";
-        key = "fb5d12b9d8febe836e5670abd003ddca";
-}
-
-	
-else if (getURL == "Rm94U3BvcnRzMl9VWQ==") // ESPN 7
-{
-        keyId = "5fc7b662e69c0fbf8d39691166b1c919";
-        key = "89157cdd25df25d56f1ecccee3850888";
-}
+        function testMpdURL(url) {
+                return new Promise((resolve, reject) => {
+                        let xhr = new XMLHttpRequest();
+                        xhr.onreadystatechange = function () {
+                                if (xhr.readyState === 4) {
+                                        if (xhr.status >= 200 && xhr.status < 300) {
+                                                resolve();
+                                        } else {
+                                                reject(new Error("HTTP request failed with status " + xhr.status));
+                                        }
+                                }
+                        };
+                        xhr.open("GET", url, true);
+                        xhr.send();
+                });
+        }
+        testSubdomains();
 
 
-else if (getURL == "Rm94U3BvcnRzM19VWQ==") // ESPN 6
-{
-        keyId = "5fc7b662e69c0fbf8d39691166b1c919";
-        key = "89157cdd25df25d56f1ecccee3850888";
-}
-	
-else if (getURL == "RVNQTjQ=") // ESPN 5
-{
-        keyId = "24f2b3e741f0d9e9a8d516faff38bddc";
-        key = "bbd3fd02fb104e1463ac528a13f67e4a";
-}	
-	
-else if (getURL == "TkJBX1RW") //NBA TV
-{
-        keyId = "d0c38de3c9844e4e9f975dffb3eff8ad";
-        key = "141ca0fdf6ebadfa7107576b8e09e117";
-}
-
-else if (getURL == "SFRW")  // HTV
-{
-        keyId = "daecef5fe32f4ce083c6a0c692755d6a";
-        key = "d4227f24389a9ba77293214b93eb0d7d";
-}
-	
-else if (getURL == "SW52ZXN0aWdhY2lvbl9QZXJpb2Rpc3RpY2E=")  // IP Noticias
-{
-        keyId = "5299f96f873aa0f0e47edc4e15784717";
-        key = "9d53176b0969492f2d93f1867be1dce1";
-}
-	 
-else if (getURL == "UlBDX0M0")  // el trece py
-{
-        keyId = "a8093cdcb2d504bd38f16764bd21b6e5";
-        key = "bfcf3b033b5f0b5ae020751a6746326f";
-}
-	
-else if (getURL == "Q2FydG9vbk5ldHdvcms=") // CArton NeTwork
-{
-        keyId = "d7df56efaa36a71141d238854cc46d1d";
-        key = "8abb2ee9150d8b2af8ebec0de0f833c8";
-}
-else if (getURL == "Tmlja2Vsb2Rlb24=") // NICK
-{
-        keyId = "61c18cefecc2d067beaa9ff181305345";
-        key = "38d6f650cbf9a38fd9f35c01f98e647a";
-}
-else if (getURL == "RGlzbmV5SnI=") // Disney Junior
-{
-        keyId = "bd29c4a538f28845ce33581111749428";
-        key = "46d9589f41a11c3637c07c604956deac";
-}
-	
-else if (getURL == "RGlzY292ZXJ5X0tpZHM=") // Discovery Kids
-{
-        keyId = "ffb2f0f63c23a3592d4653e938b9ca19";
-        key = "d3661ae881fc55fc7a15815cd439747b";
-}
-
-
-else if (getURL == "Q2luZW1heA==") // cinemax
-{
-        keyId = "977928a92b82ba3781741a6470f8f45b";
-        key = "51f4e62827c128f7210b79a11587661a";
-}
-else if (getURL == "VE5UX0hEX0FyZw==") // TNT HD
-{
-        keyId = "faad1722a575f4d9ec7b774db63c879c";
-        key = "cf0184830344ba36ad2ffef9dd2dd9d0";
-}
-else if (getURL == "VE5UU2VyaWVz") // TNT Series
-{
-        keyId = "5c14d6aeb19bf113edf91a7b544253cb";
-        key = "8d776d6f9c5c840ebe88d767dd731692";
-}
-else if (getURL == "VEJT") // TNT Novelas (TBS)
-{
-        keyId = "49a0179b034ae899cb67d8a5834181aa";
-        key = "486e2c6d69adea7e17f2960e8e366612";
-}
-else if (getURL == "U29ueUhE") // Sony Channel
-{
-        keyId = "fd9619f9d7c2d5115a339941279e0b4b";
-        key = "bf55635e6591f905659fa27ab3ca2812";
-}
-else if (getURL == "VHJ1VFY=") // TruTV
-{
-        keyId = "7d0cecffe9c29734343cf9983978c1a1";
-        key = "f86b5ac05f2a2626b6c61bd4e13344d8";
-}
-
-else if (getURL == "QWR1bHRfU3dpbQ==") // AS
-{
-        keyId = "9be1432e1e594c8d0648a44d3d9f0c46";
-        key = "8e6c785b14d973c504074b1920f11b15";
-}
-	
-else if (getURL == "VENN") // TCM
-{
-        keyId = "a5f44a5e30714cf3bcee7c7f15a08b4e";
-        key = "c3c141ae941ab9750339c3af45a65ce2";
-}
-
-else if (getURL == "SEJPSEQ=") // HBO 
-{
-        keyId = "5317283f4110fac3fb3a0becd9f648bc";
-        key = "0754a03c926b1247216e01d9dbcfac28";
-}
-
-else if (getURL == "SEJPXzI=") // HBO 2
-{
-        keyId = "c90cc57ad2c436e5a77db2f8d9db2d85";
-        key = "04f6c73984bdcffd013050608497935d";
-}
-
-else if (getURL == "SEJPX1BsdXM=") // HBO Plus
-{
-        keyId = "f0e7f7d458990edfab7b98b412564615";
-        key = "79205754b7f84a62661c2dbe9de5dd5d";
-}
-
-else if (getURL == "SEJPX0ZhbWlseQ==") // HBO Family
-{
-        keyId = "535473132f68082160b489482ca35f8e";
-        key = "e90fd91fcd3fc809bed2b1c0d37f7297";
-}
-
-else if (getURL == "SEJPX0V4dHJlbWU=") // HBO Xtreme
-{
-        keyId = "d504011bbef467c0de3a7534e302a6d4";
-        key = "334103e2abe16faa7f9ab2e3097c5a58";
-}
-
-else if (getURL == "SEJPX011bmRp") // HBO Mundi
-{
-        keyId = "7821b2662148fe333d5191acbb8a5c1f";
-        key = "ae43f3e2545237ebda58b13813b5d328";
-}
-
-else if (getURL == "SEJPX1BPUA==") // HBO POP
-{
-        keyId = "f4e1ce5cef7e9a110fe968f8881b21fa";
-        key = "6bbe2062b150b11496cdd5fbdd9c89d6";
-}
-
-else if (getURL == "SEJPX1NpZ25hdHVyZQ==") // HBO Signature
-{
-        keyId = "e866499fbc1149f49989672075aa3a68";
-        key = "d2dd5c95623c6343240981c2202fc311";
-}
-
-if (getURL == "QW5pbWFsUGxhbmV0") // Animal Planet
-{
-	keyId = "4146a8ecbb0540dc807c6389ee87e0bc";
-	key = "0c3cdc1b3e4617c57361265e9fa4c5bd";
-}
-if (getURL == "RGlzY292ZXJ5SG9tZUhlYWx0aEhE") // Discovery hyh
-{
-	keyId = "9b0a76dd7a0df1e1b4320aeb1254d1a9";
-	key = "d011267775c38d6d2ab09b428c03d63f";
-}
-
-if (getURL == "VExD") // Discovery TLC
-{
-	keyId = "58761c7b2819491eb3a0d765842c341a";
-	key = "9dabc48f88bd7f266734e57501bd6f47";
-}
-
-if (getURL == "Q2FuYWxfZGVfbGFfY2l1ZGFk") // El Canal de la Ciudad
-{
-	keyId = "5ee7842b3cf24d1dba088365fa5d0543";
-	key = "69cec006409823c06fbf2866a231b4f7";
-}
-
-if (getURL == "RGlzY292ZXJ5VHVyYm8=") // Discovery TURBO
-{
-	keyId = "a611ddbf8c15fa617a0c391cb7b3e128";
-	key = "0cd1300baf8890380fd41124962195c4";
-}
-
-
-	
-if (getURL == "SUQ=") // Discovery  id
-{
-	keyId = "0956caf2e2bd41f49fdcead7cc94fe24";
-	key = "640c49578073a911938617eb4e652d6c";
-}
-
-
-if (getURL == "Q2FuYWwxMF9VUlU=") // Canal 10 uru
-{
-	keyId = "8dd34782d754f8fcb1e8b38da9ffad0b";
-	key = "6fb97467c0f0ea13f86d41a70e029c51";
-}
-
-
-if (getURL == "SGlzdG9yeUhE") // History Channel
-{
-	keyId = "e82318e518ba70cea3d7b37bef99e692";
-	key = "a05fcb634c071a514e3039e1c274b4db";
-}
-if (getURL == "SGlzdG9yeV8y") // History Channel 2
-{
-	keyId = "ecbe97ec34784304b390a12ba3854ccf";
-	key = "5a0ee36ed9b8920cb19546fd92f2d415";
-}
-
-if (getURL == "TmF0R2VvSEQ=") // NATGEO
-{
-	keyId = "4be0c61ceddc62294cc9e23b627af53d";
-	key = "852c1935d11c3c53d0a1ceff3bb3bf16";
-}
-	
-else if (getURL == "VlRWX1BsdXNfSEQ")
-{
-        keyId = "da8a49a594160cc0059f07b9f71cd39a";
-        key = "37ca91dd799b351a02445151c7f61070";
-}
-else if (getURL == "VHlDX0ludGVybmFjaW9uYWw")
-{
-        keyId = "58e1ebe75d944f6a98ea67b1c7c0a572";
-        key = "1c311b069dbce31ce8e62a6e7e2433eb";
-}
-else if (getURL == "QnJhdm9UVg==")
-{
-        keyId = "ad7fbbec39cea4a5a63ac13d94da48d4";
-        key = "f71087b4dc211db079237c0fb783eb93";
-}
-else if (getURL == "RHJlYW13b3Jrcw==")
-{
-        keyId = "7f30c43e47544412221fd64201d92f4b";
-        key = "f83d09d75a0946b1d71aa48c201b4d8b";
-}
-else if (getURL == "Qm9vbWVyYW5n")
-{
-	keyId = "5792e613fceb699c79cbc0e75fe4cd37";
-	key = "a672793730476ed23e5c1bce2ff570c6";
-}
-else if (getURL == "Rmxvd19NdXNpY19YUA==")
-{
-        keyId = "b2aae44a74144be8b2118e20d1412bab";
-        key = "8a7ae996d12d8d5d5637d1044f8e08b7";
-}
-else if (getURL == "Rmxvd19NdXNpY18x")
-{
-        keyId = "f34cd7709f093d23d4db009107d96862";
-        key = "d8a829138d970b45e867c9733a31b2f0";
-}
-else if (getURL == "Rmxvd19NdXNpY18y")
-{
-        keyId = "596b599580b39ae2f3c413f7eae36902";
-        key = "2d7e3d5d31f68690fd877a111f84e8e3";
-}
-else if (getURL == "Rmxvd19NdXNpY18z")
-{
-        keyId = "e078b15ed770ec71f803c0ecc43de033";
-        key = "7010bccda544f74d1b425c4cebd082d4";
-}
-else if (getURL == "VGV2ZV9DaXVkYWQ=")
-{
-        keyId = "9b536cd1716647ee94c45fa4836d29d6";
-        key = "d691c88a95440666742d1d8183182347";
-}
-else if (getURL == "RVNQTkhE")
-{
-	keyId = "cc8d44406ed6bf1898ad9f7a2d64f29e";
-	key = "fb85d059687ab0fc67805806204edbdf";
-}
-else if (getURL == "TmF0R2VvSEQ=")
-{
-        keyId = "4be0c61ceddc62294cc9e23b627af53d";
-        key = "852c1935d11c3c53d0a1ceff3bb3bf16";
-}
-else if (getURL == "Q2FuYWw0X1VSVQ==")
-{
-        keyId = "dabefaac89742589778fcfab78f08354";
-        key = "896dd914683b01c8044ffd34d7b6416b";
-}
-else if (getURL == "Rk9YSEQ=")
-{
-        keyId = "8023e85ef9d17561ee1b424179b1b15e";
-        key = "477ad189f1fcd2baec026068107f862f";
-}
-else if (getURL == "Q2FuYWwxMlVSVQ==")
-{
-        keyId = "dfde9d35d7438bfdf61da5dfac0557c1";
-        key = "acb13370c03a7254e2bb9cc9d2125017";
-}
-else if (getURL == "Q00=")
-{
-        keyId = "682f36b5736f4560951ca14b80d29524";
-        key = "3accb729067a39b3b8143f1b447b9d25";
-}
-else if (getURL == "UEFLQV9QQUtB")
-{
-        keyId = "334001b2f2644df9bdf35e92d2b89f8f";
-        key = "475ec87d86ed0636dbb6d6d9d4a43bb7";
-}
-else if (getURL == "Q29tZWR5Q2VudHJhbA")
-{
-        keyId = "4013f784c5ef4318ad47024e61eb094e";
-        key = "bad433a547f97c7f65cda5e83b8dd416";
-}
-else if (getURL == "RV9FbnRlcnRhaW5tZW50X1RlbGV2aXNpb24=")
-{
-        keyId = "5883553207f13e3dc8cecd1113d5ba68";
-        key = "45434d40636dfa0e5312b93218e02185";
-}
-else if (getURL == "R291cm1ldA==")
-{
-        keyId = "93d853ac4c8e24cf0295f6f97ee53bd3";
-        key = "fa5817fab4fb054ccea1abb9f3d767ed";
-}
-else if (getURL == "Rm9vZF9OZXR3b3Jr")
-{
-        keyId = "6ca0fbad21a0e908c0280dcc27e6ee0e";
-        key = "62670eedbafdf9360b4ecaed738e26cd";
-}
-else if (getURL == "U1VSX1RWX0M0")
-{
-        keyId = "c047764a90e9a5b0213aec8fed8a24aa";
-        key = "07e62001064fbe64796b4ed3836761f4";
-}
-else if (getURL == "RXVyb25ld3M=")
-{
-        keyId = "d86b0f56d32f45adb0a6b4e488c8f0c2";
-        key = "e4f180b0e61be3e80ab602df5e56ff3f";
-}
-else if (getURL == "U05UX0M0")
-{
-        keyId = "9f61dcce871cc41aeb206d05028fc30a";
-        key = "9f6248194a3bf5e35b96b194e8624693";
-}
-else if (getURL == "Tk9USUNJQVNfUFlfQzQ=")
-{
-        keyId = "8f66fe15735b2b1b3d5eb3646caa405e";
-        key = "404b93fd7b499b1061c9a714e1cdb2d0";
-}
-else if (getURL == "Tk9USUNJQVNfUFlfQzQ=")
-{
-        keyId = "8f66fe15735b2b1b3d5eb3646caa405e";
-        key = "404b93fd7b499b1061c9a714e1cdb2d0";
-}
-else if (getURL == "UEFSQVZJU0lPTl9DNA==")
-{
-        keyId = "bd8e8c9b32ef027e8ff4ff0cfce855a4";
-        key = "2918e9893b570c3fa1f215b52a12cc91";
-}
-else if (getURL == "TEFfVEVMRV9DNA==")
-{
-        keyId = "7c6a481adf6a080ec09637d3f25989cf";
-        key = "036e343d636b821ab81838de387b62cb";
-}
-else if (getURL == "UEFSQVZJU0lPTl9DNA==")
-{
-        keyId = "b02c568163c14cfda4ddb958a0aab742";
-        key = "edef8ba979d64acea3c827dcd51d21ed";
-}
-else if (getURL == "RXVyb3BhX0V1cm9wYQ")
-{
-        keyId = "b47f257df0314d09a7f8355c3abe1dc6";
-        key = "bdc9f1696a82ee7398dd3a7fa82300e2";
-}
-else if (getURL == "QzlOX0M0")
-{
-        keyId = "646700eeb14cadfa0543a20cf413d37e";
-        key = "4fc037c462023764624d8446442cbbca";
-}
-else if (getURL == "VW5pdmVyc2FsX0NoYW5uZWxfSEQ=")
-{
-        keyId = "6cf9a13d6fd65a0f2e1cee3969aab9f5";
-        key = "ea61c3c1adee71b5c2e9744e41d4b75f";
-}
-else if (getURL == "UGFyYW1vdW50")
-{
-        keyId = "b85b710ecff3e38f31fc8e249b1c1cef";
-        key = "a1544c193dde6f8858c9358ee69a60a7";
-}
-else if (getURL == "UGFyYWd1YXlfVFY=")
-{
-	keyId = "68a5bd6c58e6c05bacfd18d3feec31f2";
-	key = "ae23f8357512df2dfabcb8104b078182";
-}
-else if (getURL == "RmlsbV9BcnRz")
-{
-	keyId = "91c540d350f34f5386f3f1c77f74001f";
-	key = "54ee72810551da0cba0c45a8df651962";
-}
-else if (getURL == "Q2FuYWxfMTJfQ0JB")
-{
-	keyId = "90422640d3e846159fa450f83870ed4a";
-	key = "abb3cd94aece1a462df25a8f21085cca";
-}
-else if (getURL == "RWxfR2FyYWdl")
-{
-	keyId = "03d1dfb8df034d8b81e57753df00a36d";
-	key = "08d83660db4a73bb1d61d60b09df5f4d";
-}
-else if (getURL == "VGVsZW1heA")
-{
-        keyId = "e7ec364ad6854fedad797538cb58780d";
-        key = "57dfb3fca2ca35b37ff81c35595e9be8";
-}
-else if (getURL == "TmV0X1RW")
-{
-        keyId = "89d433166edd31d56df2a59df8ec6704";
-        key = "b2015faded0a456d10aa8db1b4cbac68";
-}
-else if (getURL == "Q2FuYWxfOF9UdWN1bWFu")
-{
-	keyId = "7760caa058b51b7cce151c0539fa4a8f";
-	key = "edd086c1011ed2c54cbe869d0e8d9289";
-}
-else if (getURL == "TWFnYXppbmU=")
-{
-	keyId = "4f1235069d34c22cb73d9b78bae15587";
-	key = "55e068ff6b152e34c66dc639b38e8692";
-}
-else if (getURL == "RW5jdWVudHJv")
-{
-	keyId = "ac3ae78beb64478ab390b4ad70e3e0c9";
-	key = "c7d669761c3516d852a0edf9e07c9198";
-}
-else if (getURL == "VGVsZWZlX05ldXF1ZW4=")
-{
-        keyId = "55828b728b8affe6d1d57d050025645d";
-        key = "8ac11ed6d0ccaeac3f8218419f65bb94";
-}
-else if (getURL == "VGVsZWZlX1NhbHRh")
-{
-        keyId = "6c7a5de392f874308e4dd8f2837f1115";
-        key = "9ccf9ec6922c403d67d0df7952547581";
-}
-else if (getURL == "TGFfTmFjaW9u")
-{
-        keyId = "f4eade7bbc39b25402acfa301bbad04a";
-        key = "a74d1df4235a74878327aa8d53ff283c";
-}
-else if (getURL == "Q3JvbmljYVRW")
-{
-        keyId = "745e7abcc90d41ab706b2ac2f4371da3";
-        key = "50acd9d19d1361cb4a8a13a867bdc352";
-}
-else if (getURL == "Q2FuYWw5")
-{
-        keyId = "24f4ff211136ae6512a1b552200db405";
-        key = "602122f8426c5c942b8c18d299cc6020";
-}
-else if (getURL == "QzVO")
-{
-        keyId = "050df5c6e78c774e78c3e99eef8a1b29";
-        key = "0e4141d6ab21a36cbc4da777ab3096d4";
-}
-else if (getURL == "QW1lcmljYVRW")
-{
-        keyId = "8ea235ce0826408b221c498115a9b62d";
-        key = "7aa9266ed91ea4510483370029dfcf45";
-}
-else if (getURL == "QXJ0ZWFySEQ")
-{
-        keyId = "5179017f49326d14af0a9ceec831aee6";
-        key = "09b4a463b029ebc28a288bed2da70a76";
-}
-else if (getURL == "VGVsZWZlSEQ=")
-{
-        keyId = "3cec1b1ea9799dda5596e64f37e5ed20";
-        key = "c69f3afde2085dcaaaddbf55246a0323";
-}
-else if (getURL == "QW1lcmljYTI0")
-{
-        keyId = "3b1b027dd011af20fd9956c16dc084fb";
-        key = "45f75aacf06593c9b693fe427c67e5b8";
-}
-else if (getURL == "RGlzbmV5Q2hhbm5lbEhE")
-{
-        keyId = "4a742e478d14023e1993e011d9415f94";
-        key = "0df77ede9bc744376836d21afa137dda";
-}
-else if (getURL == "TWV0cm8")
-{
-        keyId = "719aa3a5e270c7f69eba374ed80d7986";
-        key = "97ac59118cf4cf242e2c31e87cd38e1e";
-}
-else if (getURL == "R0VOX1RW")
-{
-        keyId = "49eb924ba998ca7fbbaee30dcef1ecb4";
-        key = "6e131b04b2e87598fb588ac205673698";
-}
-else if (getURL == "QkJDX1dvcmxkX05ld3M")
-{
-        keyId = "019f72f2091d4cbea59ff8c85b117f86";
-        key = "a4eac51195506752f9f63ad24def9c37";
-}
-else if (getURL == "VG9kb05vdGljaWFz")
-{
-        keyId = "7ceb1cd0622cd7e88fcdc99fe3a55de6";
-        key = "951637093d41c7388a1ef3f620cfea21";
-}
-else if (getURL == "QXJnZW50aW5pc2ltYQ")
-{
-        keyId = "a6243f46366445ebbf3117ec27365481";
-        key = "81667cdc3bcf19a6a66c0919fa00a20b";
-}
-else if (getURL == "Q2FuYWxfNV9Sb3Nhcmlv")
-{
-        keyId = "c61b5ac8e1664bf5b544e92ea2597e1c";
-        key = "938437ac25f0a18e04efc1a083489edc";
-}
-else if (getURL == "Q2FuYWxfOF9DQkE")
-{
-        keyId = "103ce214b4d04c8eb4dd43670e956dad";
-        key = "20e030576b8dc4df0d1c68e16af3bc0f";
-}
-else if (getURL == "RGlwdXRhZG9zX1RW")
-{
-        keyId = "9666b195171442afd4551a8de01291a6";
-        key = "1c0061df9b4b098e40355167e97cfbf0";
-}
-else if (getURL == "MjZfVFZfSEQ")
-{
-        keyId = "e32aaa4b67430b3b51be1efce5a74ac5";
-        key = "ad60c5e1d378a97271bf8688f094d092";
-}
-
-else if (getURL == "RVNQTjJfQXJn")
-{
-	keyId = "65a5bfa3c7a72dde60be9b0c7406c8fc";
-	key = "0b40ae9f78a7bac3b57ecbf72d3c081e";
-}
-else if (getURL == "RVNQTjM")
-{
-	keyId = "f4c9f97e2a36feab0e5077f2b44cbc4e";
-	key = "1743cd03dfe3736b2c95da91a783af38";
-}
-else if (getURL == "Rm94U3BvcnRz")
-{
-        keyId = "cbc2a0c7a38df0aa3333cd71841d3b0d";
-        key = "aac61b730e2ac1df23f1e872e7541c1b";
-}
-else if (getURL == "Rm94U3BvcnRzMkhE")
-{
-	keyId = "c98ddffc470fe449ae1a8d6492116976";
-	key = "5086d370e840010232cf4532b16e197f";
-}
-else if (getURL == "Rm94U3BvcnRzM0hE")
-{
-	keyId = "55b47390cf9e4997dae6dac85e057875";
-	key = "fa39e855543c5d70f30600d59e5e4c1b";
-}
-else if (getURL == "VHlDU3BvcnQ")
-{
-        keyId = "2b21c8fa9a329cce311a4c4a4aa996a1";
-        key = "cc23ea1fb32629f9e1f48c8deeae3e5b";
-}
-else if (getURL == "VE5UX0hEX0FyZw")
-{
-        keyId = "faad1722a575f4d9ec7b774db63c879c";
-        key = "cf0184830344ba36ad2ffef9dd2dd9d0";
-}
-else if (getURL == "VE5UX1Nwb3J0c19IRA")
-{
-        keyId = "bc80fa3da696e503f940fde5f681a1c5";
-        key = "ea46e4e9f1132e8dd71fb77f7d55058a";
-}
-else if (getURL == "Rm94X1Nwb3J0c19QcmVtaXVuX0hE")
-{
-        keyId = "4c230dbc7f6a4bfa6ad0aa73ff792374";
-        key = "4186a7c2a15f590a9399886feaec4257";
-}
-else if (getURL == "Q2FuYWw3")
-{
-        keyId = "cc8c82ac2ec7e9799527c29db7354e81";
-        key = "cc4aae173dd2ef17ae26be3f7ae87662";
-}
-else if (getURL == "RGVwb3JUVkhE")
-{
-        keyId = "f362097815892a4b83950f1d106ff0b2";
-        key = "4349e42e81c31a8389f4a42fcd298928";
-}
-else if (getURL == "RVNQTkhE")
-{
-	keyId = "cc8d44406ed6bf1898ad9f7a2d64f29e";
-	key = "fb85d059687ab0fc67805806204edbdf";
-}
-else if (getURL == "VlRWX0hE")
-{
-	keyId = "b96960aa715a4e51b7e952e81c99ac8e";
-	key = "5bbffc680764dbd63d90b774b3aa0c0a";
-}
-else if (getURL == "QTNfQ2luZQ==")
-{
-	keyId = "d6ff881a6f07986a80d6ad6f041b57d4";
-	key = "b401c87c2ab11a1a488ee1c474b109ae";
-}
-else if (getURL == "VGhlYXRlcl9IRA==")
-{
-	keyId = "5279c05ea51c4dae8e7fa6be88448089";
-	key = "b28dfafba4b848dfd5d7c177ebf19108";
-}
-else if (getURL == "R2xpdHo=")
-{
-	keyId = "f812ef81d6ce425a8db4012a1ef8b0c1";
-	key = "5c2b9791b1074727eb349588e32bdc0a";
-}
-else if (getURL == "UXVpZXJvX0hE")
-{
-	keyId = "a354b0c82a3a720c4a6f52ed5a1190f4";
-	key = "45a76dcc84f058cfabc8b958d7303b28";
-}
-else if (getURL == "RGlzY292ZXJ5X1dvcmxkX0hE")
-{
-	keyId = "34ee94c2263345f7a3a590661264e490";
-	key = "56757d656a697ab7a2e5e083b5d21bb5";
-}
-else if (getURL == "RXVyb2NoYW5uZWw=")
-{
-	keyId = "6f0fc214d9844a7590f0884d55b44c42";
-	key = "b2fe1bb5f9c79035301c328c1e93b0ee";
-}
-else if (getURL == "RGlzY292ZXJ5X1NjaWVuY2U=")
-{
-	keyId = "46ba409fb04e40fb86b466d97e3a9588";
-	key = "f129fb9b5d213e20e2abe529b8cf2597";
-}
-else if (getURL == "SU5DQUFfVHY=")
-{
-	keyId = "d44f40e49d2945c1a3701c0885ff0b00";
-	key = "6382b6279087402714b6824688c456df";
-}
-else if (getURL == "Rmxvd19NdXNpY19YUA==")
-{
-	keyId = "981576de24909fe105ae84f5faf21d18";
-	key = "113e8d2808c1d3da48ad37bdc7a27a9b";
-}
-else if (getURL == "QUVIRA==")
-{
-	keyId = "db12035627a4b3d7198b761f36b4a290";
-	key = "80ca761a875992ac0e50b0851d5563fe";
-}
-else if (getURL == "VFY1X01vbmRl")
-{
-	keyId = "62034ff5988b4787b17cdf6f751a3142";
-	key = "b3938f0af28b4c0c082b0d4210e389a0";
-}
-else if (getURL == "SG9sYV9UVg==")
-{
-	keyId = "5d759477f0ad1bdef2c6de09e7c275fd";
-	key = "82cc6eea185eecc934df95adfbbf9dbc";
-}
-else if (getURL == "TVRWX0hpdHM=")
-{
-	keyId = "61008dfc867544cd872de99b1f2b82cf";
-	key = "716449756316b91c54803aaa22a2fbf0";
-}
-else if (getURL == "VEVMRUZVVFVST19DNA==")
-{
-	keyId = "5d2731cf8a59b73438ef59d88cd882bf";
-	key = "3f412fa6368b7db4903588de695377e1";
-}
-else if (getURL == "TVRWX0hE")
-{
-	keyId = "0c9eb3ead38a122ac460ad96a8ebfd2e";
-	key = "66bfbfa4449eb8bc1bcf7577d5bffaad";
-}
-else if (getURL == "Tmlja19Kcg==")
-{
-	keyId = "e824b2277a86fd6adfc40aa948e5064a";
-	key = "28da2dbbe8e1a1463bbb23895b922083";
-}
-else if (getURL == "QVhOSEQ=")
-{
-	keyId = "03e77b5bbf5135a85d587c5af2f2f730";
-	key = "1dd1ab1938a791d03f09eb88478b4880";
-}
-else if (getURL == "TVRWMDA=")
-{
-	keyId = "1f0c09ed9e5841cf867ba6eb3cdfd61d";
-	key = "802c89c6bae6a245aaafcf40c1986fc1";
-}
-else if (getURL == "VFZfRXNwYW5h")
-{
-	keyId = "53e0a3741e2e4ff5843f165b53309088";
-	key = "45095caabd9a359cd7ea3910d865d643";
-}
-else if (getURL == "V09CSQ==")
-{
-	keyId = "f2e44a719947ebfe37de527a9d6df71e";
-	key = "029bddeb08909dd66a80276fc338d692";
-}
-else if (getURL == "Vm9sdmVy")
-{
-	keyId = "194e53184a424ce6989ad82c5f28fbc5";
-	key = "65d60c5cc4de031172be0a6a51edbdfe";
-}
-else if (getURL == "VGVsZXN1cg==")
-{
-	keyId = "5235d8ee29f14ce6b26ea5d828aee77a";
-	key = "6bf6bd339e3098babc2ab0b984cd2376";
-}
-else if (getURL == "TGlmZXRpbWU=")
-{
-	keyId = "eae51b1d67ff47adac7b6bd3a4b1120a";
-	key = "b4d6bb47193f33ffc12379cdc447455d";
-}
-else if (getURL == "U3BhY2U=")
-{
-	keyId = "0942e4ecd1bd3567e8f9447f45c20a12";
-	key = "efca6264f04cf7373de0c30ec79fe909";
-}
-else if (getURL == "QW50ZW5hXzM=")
-{
-	keyId = "1e1ad422a6714482b66fa702c16e50c6";
-	key = "4fdf28a0ab91356ca55a75f4e9bf8c92";
-}
-else if (getURL == "UGxheWJveQ")
-{
-	keyId = "8577d81eaf33436d9f1e482360685a7c";
-	key = "f608a0ac703cfaaf9442574d9a2b87fb";
-}
-else if (getURL == "Rm94X05ld3M=")
-{
-	keyId = "3fe3f31a5e7b48a1b548e9364757ce66";
-	key = "32993fc281207fe915f6f1e990957868";
-}
-else if (getURL == "VHZfQ2hpbGU=")
-{
-	keyId = "c5d0d76e24844235988f9265619e5fec";
-	key = "446b71a6deb806c6f129e25de999d07c";
-}
-else if (getURL == "RGlzY292ZXJ5SEQ=")
-{
-	keyId = "c283c84a7af0d7c8b9b612a8fb22a001";
-	key = "f45510c721eebd6eaa86a2e16ccbd77d";
-}
-else if (getURL == "RlhIRA==")
-{
-	keyId = "9ab9c42c713e0fb5517dc77cc19d6755";
-	key = "d8c271b82387e609b6c19e5e79240aff";
-}
-else if (getURL == "TWFzX0NoaWM=")
-{
-	keyId = "dac8ff1688994efd898222acdd05cafc";
-	key = "22fdf97c7233667518258ed16ccb2545";
-}
-else if (getURL == "U3R1ZGlvX1VuaXZlcnNhbA==")
-{
-	keyId = "d9b541e3cd064d569843da42788d4263";
-	key = "bba5d26ad5051fb3f2cf7e3dd8a4a7d8";
-}
-else if (getURL == "SVNBVA==")
-{
-	keyId = "db764164934a48749a7a01bd015694f3";
-	key = "512f3c8869af45e6e5dd1525b6a77867";
-}
-else if (getURL == "V2FybmVySEQ=")
-{
-	keyId = "069bd3f0b6c279467e08549f17bf5bd0";
-	key = "5afa7e369a6de1093818a85af912a775";
-}
-else if (getURL == "U3VuX0NoYW5uZWw=")
-{
-	keyId = "158177692aa3463eae5f4e1f72403e9c";
-	key = "1c6c026fba9cf7ecb576c7bedce0ead4";
-}
-else if (getURL == "Q2luZWNhbmFsSEQ=")
-{
-	keyId = "6003e92dd0d9f548329015c9e15dd578";
-	key = "213cf85cb5f9fe569757004a77e05948";
-}
-else if (getURL == "QU1D")
-{
-	keyId = "1fa6a86fd80b6d1425dde74482b5dc9c";
-	key = "744c3636d57a651ab444cf9fe5f95b33";
-}
-else if (getURL == "UkFJ")
-{
-	keyId = "d214547d7d9a4011a39a899ce6e70071";
-	key = "16c2ed0617cf1e123f3af6ea8875a82d";
-}
-else if (getURL == "VmVudXM=")
-{
-	keyId = "34237d2ae6684ee7a011f5b9c7c43e6d";
-	key = "05d973d987915120e567880f50a422af";
-}
-else if (getURL == "U2V4dHJlbWU")
-{
-	keyId = "95bd64227acf458daf7886f803d0298e";
-	key = "79e28ee0ec58958bb666f9e53a0cd434";
-}
-else if (getURL == "RXZlbnRvczFIRA") // Eventos 1
-{
-        keyId = "5c86e237317c2231ac1bc130e995fad6";
-        key = "dcacf7b239ee03df3c69ca11dbcde4eb";
-}
-
-else if (getURL == "RXZlbnRvc18yX0hE") // Eventos 2
-{
-        keyId = "e54e9ea87a634658fbba0e380aa701a7";
-        key = "4e486d25d7d0e7d131743b285963c643";
-}	
-else if (getURL == "REhF") // DHE 
-{
-        keyId = "ff800156f81f70c687eccaadedc2ca15";
-        key = "937ba1301e27008b34d02b9d8a31a0db";
-}
-else if (getURL == "UGFzaW9uZXM=") // Pasiones
-{
-        keyId = "d41cf825e878f0d8e276218af7f5b7e1";
-        key = "13d1b73ab578ab8623be9347bcf8972a";
-}
-else if (getURL == "U29ueV9Nb3ZpZXM")//Sony Movies
-{
-
-        keyId = "88b9c41e72acd5b589bbfb4776969781";
-        key = "43b9403f7a9e28fc2d7cbf10373b85aa";
-}
-  
-
-
-
-var mt = [   "cdn", "chromecast" ];
-
-
-var playerInstance = jwplayer("player");
-
-function initializePlayer(autoplay) {
-  var random = Math.floor(Math.random() * mt.length);
-  var mpd = "//" + mt[random] + ".cvattv.com.ar/live/c" + number + "eds/" + atob(getURL) + "/SA_Live_dash_enc_wl/" + atob(getURL) + ".mpd";
-
-  playerInstance.setup({
-    playlist: [{
-        title: "REPRODUCTOR",
-        image: "",
-        description: "EN VIVO",
-      "sources": [
+        if (getURL == "RVNQTjJIRA")//ESPN
         {
-          "default": false,
-          "type": "dash",
-          "file": mpd, 
-          "drm": {
-                    "clearkey": { "keyId": keyId, "key": key }
-          },
-          "label": "0"
+                keyId = "e884b711ab111beb8a7ba1e7bcbdc9bf";
+                key = "cb89ee3961599e3e648a5aad60895f34";
         }
-      ]
-    }],
-    width: "100%",
-    height: "100%",
-    aspectratio: "16:9",
-    stretching: "exactfit",  
-     mute: "false",  
-    autostart: false, 
-    skin: {
-         name: " white",
-       active: " white",
-       inactive: "#ffff00",
-       background: "#000000"
-    }
-  });
-}
+        else if (getURL == "QW1lcmljYV9UdWN1bWFu") //America_Tucuman
+        {
+                keyId = "ed542fdaa4598671e26aca3e160afed7";
+                key = "cdb880c60523b9ebc61b9003c41f8048";
+        }
+        else if (getURL == "Q0hfMTNfQ29ycmllbnRlcw==") //CH_13_Corrientes - El trece No anda
+        {
+                keyId = "ee837d0ec414d95a51b0c7a57d49d307";
+                key = "ee837d0ec414d95a51b0c7a57d49d307";
+        }
+        else if (getURL == "Q2FuYWxfOV9QYXJhbmE=") //Canal_9_Parana - El trece
+        {
+                keyId = "dd573858f3414066b9292ef6397a5c3c";
+                key = "593eb5f7facce4240ff7a5f26afd47e0";
+        }
+        else if (getURL == "Q2FuYWxfM19Sb3Nhcmlv") //Canal_3_Rosario - El trece
+        {
+                keyId = "662447df521fb590b72b1a11671c2afd";
+                key = "81c204c443987d7b176587d626a124a0";
+        }
+        else if (getURL == "Q2FuYWw3X0JhaGlhX0JsYW5jYQ==") //Canal7_Bahia_Blanca - El trece
+        {
+                keyId = "a15243320c0a79defa8814252e3e8c07";
+                key = "0659db05632c0061c126db7a12582499";
+        }
+        else if (getURL == "Q2FuYWxfUnVyYWw=") //Canal_Rural
+        {
+                keyId = "b02c568163c14cfda4ddb958a0aab742";
+                key = "ef64a70ac85a663a3308be6476610aad";
+        }
+        else if (getURL == "U2hvd19TcG9ydHM=") //Show_Sports
+        {
+                keyId = "df3ed6245bb9af1a0346379e8e475dff";
+                key = "f86f8457438d4e449d53b956cc1be664";
+        }
+        else if (getURL == "UFhfU3BvcnRz") //PX_Sports
+        {
+                keyId = "9393321daef1463fc7e2e060298db852";
+                key = "be6bc91e17816f67e62596bed463c5ad";
+        }
+        else if (getURL == "Q2FuYWxfMTNfU0ZF") //Santa Fe Telefe
+        {
+                keyId = "59ef9057114f44a480b62e36a6b1374f";
+                key = "74ef97bc54df5655c3a1d4f80b16e8d7";
+        }
+        else if (getURL == "Q2FuYWw5X0JhaGlhX0JsYW5jYQ==") //Bahia Blanca - Telefe
+        {
+                keyId = "7ccfc823faed878832b3e4a69fcb72a2";
+                key = "d68b394ab768f4a2ec148ab8cdac46ef";
+        }
+        else if (getURL == "Q2gxMF9UdWN1bWFu") //Ch10_Tucuman
+        {
+                keyId = "7a53740aa52d8b50ccb218aab5e9d50e";
+                key = "e772fa4a4997b50a0ff04e2ef286a864";
+        }
+        else if (getURL == "Q2FuYWxfYQ==") //CANAL A
+        {
+                keyId = "324ec73787744554ae1aef231a4f8f97";
+                key = "677a040674d1d0eccef327269b222bae";
+        }
+        else if (getURL == "QW1lcmljYV9TcG9ydHM=") //Americasports-arg
+        {
+                keyId = "a0aa01337a2148bda1e21862295ae037";
+                key = "fee0f87a0527497351fc54ce36ad1de2";
+        }
+        else if (getURL == "REhF") //DHE
+        {
+                keyId = "ff800156f81f70c687eccaadedc2ca15";
+                key = "937ba1301e27008b34d02b9d8a31a0db";
+        }
+        else if (getURL == "R29sZl9DaGFubmVs") //GOLF TV
+        {
+                keyId = "38d6226b7cd2cfa86b4b9cdaa455e7d7";
+                key = "24f0ef2bf787647cc02df870417eed2b";
+        }
+        else if (getURL == "SG9tZV9hbmRfR2FyZGVu") //HGTV
+        {
+                keyId = "43bc6a87ee4f21aa320ba00b980a6fd8";
+                key = "bd55130539a30faa1d90b3142eebe0b2";
+        }
+        else if (getURL == "Q0hfOV9SZXNpc3RlbmNpYQ==") //Canal 9 Resistencia
+        {
+                keyId = "dde29700ee0423e1afe3828c6f251295";
+                key = "1928b62bc191bd26c357137d7d909868";
+        }
+        else if (getURL == "VW5pdmVyc2FsX0NpbmVtYQ==") // Universal Cinema
+        {
+                keyId = "f6ae2e17173055e4ca69dc18963406ae";
+                key = "5a955c29eb88a0b4c9a2538cc4b3aea2";
+        }
 
-var getLang = getParameterByName('lang');
-if (getLang === null || getLang === "") {
-  var lang = 1;
-} else {
-  var lang = parseInt(getLang); 
-}
+        else if (getURL == "VW5pdmVyc2FsX0NvbWVkeQ==") // Universal Comedy 
+        {
+                keyId = "062c5d25105a3a935b67e36923c73f28";
+                key = "88c2d4cec420f18d2477152c66c7870d";
+        }
 
-jwplayer().on('play', function(e) {
-  jwplayer().setCurrentAudioTrack(lang);
-});
+        else if (getURL == "dW5pdmVyc2FsX0NyaW1l") // Universal Crime 
+        {
+                keyId = "1efd7edf60e1514f775dd13d046ae708";
+                key = "c2ef1abbd945c62c11b1375eaaa50f0d";
+        }
 
-function tryInitialize() {
-  initializePlayer(false); 
-  playerInstance.on('error', function(e) {
-    if (e.code === 241401 || e.code === 241403) {
-      setTimeout(tryInitialize, 1000);
-    }
-  });
-}
+        else if (getURL == "VW5pdmVyc2FsX1ByZW1pZXJl") // Universal Premiere 
+        {
+                keyId = "0eb20b51ad13b58ad417f11318e588b3";
+                key = "ad5d29a33d73d21187157802de8e6097";
+        }
 
-function checkAndInitialize() {
-  var random = Math.floor(Math.random() * mt.length);
-  var mtUrl = "//" + mt[random] + ".cvattv.com.ar";
-  checkMtStatus(mtUrl, function(status) {
-    if (status === 200) {
-      initializePlayer(true);
-    } else {
-      setTimeout(checkAndInitialize, 1000);
-    }
-  });
-}
+        else if (getURL == "VW5pdmVyc2FsX1JlYWxpdHk=") // Universal Reality 
+        {
+                keyId = "cedd9c1a5c2ae43f80ee3197212016d6";
+                key = "bf47a3c39e164a97ea6adc4c8dd57435";
+        }
 
-function checkMtStatus(mtUrl, callback) {
-  var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4) {
-      callback(xhr.status);
-    }
-  };
-  xhr.open('HEAD', mtUrl, true);
-  xhr.send();
-}
+        else if (getURL == "RVNQTjJfQXJn")//ESPN2_Arg
+        {
+                keyId = "65a5bfa3c7a72dde60be9b0c7406c8fc";
+                key = "0b40ae9f78a7bac3b57ecbf72d3c081e";
+        }
+        else if (getURL == "RVNQTjM")//ESPN3
+        {
+                keyId = "f4c9f97e2a36feab0e5077f2b44cbc4e";
+                key = "1743cd03dfe3736b2c95da91a783af38";
+        }
+        else if (getURL == "RVNQTkhE")//ESPNHD 4
+        {
+                keyId = "cc8d44406ed6bf1898ad9f7a2d64f29e";
+                key = "fb85d059687ab0fc67805806204edbdf";
+        }
+        else if (getURL == "RVNQTjQ=") // ESPN 5
+        {
+                keyId = "24f2b3e741f0d9e9a8d516faff38bddc";
+                key = "bbd3fd02fb104e1463ac528a13f67e4a";
+        }
+        else if (getURL == "Rm94U3BvcnRzM19VWQ==") // ESPN 6
+        {
+                keyId = "5fc7b662e69c0fbf8d39691166b1c919";
+                key = "89157cdd25df25d56f1ecccee3850888";
+        }
+        else if (getURL == "Rm94U3BvcnRzMl9VWQ==") // ESPN 7
+        {
+                keyId = "5fc7b662e69c0fbf8d39691166b1c919";
+                key = "89157cdd25df25d56f1ecccee3850888";
+        }
+        else if (getURL == "Rm94U3BvcnRz")//FoxSports
+        {
+                keyId = "cbc2a0c7a38df0aa3333cd71841d3b0d";
+                key = "aac61b730e2ac1df23f1e872e7541c1b";
+        }
+        else if (getURL == "Rm94U3BvcnRzMkhE")//FoxSports2HD
+        {
+                keyId = "c98ddffc470fe449ae1a8d6492116976";
+                key = "5086d370e840010232cf4532b16e197f";
+        }
+        else if (getURL == "Rm94U3BvcnRzM0hE")//FoxSports3HD
+        {
+                keyId = "55b47390cf9e4997dae6dac85e057875";
+                key = "fa39e855543c5d70f30600d59e5e4c1b";
+        }
+        else if (getURL == "VE5UX1Nwb3J0c19IRA")//TNT_Sports_HD
+        {
+                keyId = "bc80fa3da696e503f940fde5f681a1c5";
+                key = "ea46e4e9f1132e8dd71fb77f7d55058a";
+        }
+        else if (getURL == "Rm94X1Nwb3J0c19QcmVtaXVuX0hE")//ESPN_Premiun_HD
+        {
+                keyId = "4c230dbc7f6a4bfa6ad0aa73ff792374";
+                key = "4186a7c2a15f590a9399886feaec4257";
+        }
+        else if (getURL == "VHlDU3BvcnQ")//TyCSport
+        {
+                keyId = "2b21c8fa9a329cce311a4c4a4aa996a1";
+                key = "cc23ea1fb32629f9e1f48c8deeae3e5b";
+        }
+        else if (getURL == "VHlDX0ludGVybmFjaW9uYWw")//TyC_Internacional
+        {
+                keyId = "58e1ebe75d944f6a98ea67b1c7c0a572";
+                key = "1c311b069dbce31ce8e62a6e7e2433eb";
+        }
+        else if (getURL == "Q2FuYWw3")//Canal7-TV PUBLICA
+        {
+                keyId = "cc8c82ac2ec7e9799527c29db7354e81";
+                key = "cc4aae173dd2ef17ae26be3f7ae87662";
+        }
+        else if (getURL == "RGVwb3JUVkhE")//DeporTVHD
+        {
+                keyId = "f362097815892a4b83950f1d106ff0b2";
+                key = "4349e42e81c31a8389f4a42fcd298928";
+        }
+        else if (getURL == "VlRWX0hE")//VTV_HD
+        {
+                keyId = "b96960aa715a4e51b7e952e81c99ac8e";
+                key = "5bbffc680764dbd63d90b774b3aa0c0a";
+        }
+        else if (getURL == "VlRWX1BsdXNfSEQ")//VTV_Plus_HD
+        {
+                keyId = "da8a49a594160cc0059f07b9f71cd39a";
+                key = "37ca91dd799b351a02445151c7f61070";
+        }
+        else if (getURL == "RXZlbnRvczFIRA")//Eventos1HD-ESPN EXTRA?
+        {
+                keyId = "5c86e237317c2231ac1bc130e995fad6";
+                key = "dcacf7b239ee03df3c69ca11dbcde4eb";
+        }
+        else if (getURL == "TkJBX1RW") //NBA TV
+        {
+                keyId = "d0c38de3c9844e4e9f975dffb3eff8ad";
+                key = "141ca0fdf6ebadfa7107576b8e09e117";
+        }
 
-tryInitialize();
+        else if (getURL == "QW1lcmljYTI0")//America24-A24
+        {
+                keyId = "3b1b027dd011af20fd9956c16dc084fb";
+                key = "45f75aacf06593c9b693fe427c67e5b8";
+        }
+        else if (getURL == "QTNfQ2luZQ==")//A3_Cine
+        {
+                keyId = "d6ff881a6f07986a80d6ad6f041b57d4";
+                key = "b401c87c2ab11a1a488ee1c474b109ae";
+        }
+        else if (getURL == "QUVIRA==")//AEHD
+        {
+                keyId = "db12035627a4b3d7198b761f36b4a290";
+                key = "80ca761a875992ac0e50b0851d5563fe";
+        }
+        else if (getURL == "QU1D")//AMC
+        {
+                keyId = "1fa6a86fd80b6d1425dde74482b5dc9c";
+                key = "744c3636d57a651ab444cf9fe5f95b33";
+        }
+        else if (getURL == "QW1lcmljYVRW")//AmericaTV
+        {
+                keyId = "8ea235ce0826408b221c498115a9b62d";
+                key = "7aa9266ed91ea4510483370029dfcf45";
+        }
+        if (getURL == "QW5pbWFsUGxhbmV0") // Animal Planet
+        {
+                keyId = "4146a8ecbb0540dc807c6389ee87e0bc";
+                key = "0c3cdc1b3e4617c57361265e9fa4c5bd";
+        }
+        else if (getURL == "QW50ZW5hXzM=")//Antena_3-INTERNACIONAL
+        {
+                keyId = "1e1ad422a6714482b66fa702c16e50c6";
+                key = "4fdf28a0ab91356ca55a75f4e9bf8c92";
+        }
+        else if (getURL == "QXJnZW50aW5pc2ltYQ")//Argentinisima
+        {
+                keyId = "a6243f46366445ebbf3117ec27365481";
+                key = "81667cdc3bcf19a6a66c0919fa00a20b";
+        }
+        else if (getURL == "QVhOSEQ=")//AXNHD
+        {
+                keyId = "03e77b5bbf5135a85d587c5af2f2f730";
+                key = "1dd1ab1938a791d03f09eb88478b4880";
+        }
+        else if (getURL == "QkJDX1dvcmxkX05ld3M")//BBC_World_News
+        {
+                keyId = "019f72f2091d4cbea59ff8c85b117f86";
+                key = "a4eac51195506752f9f63ad24def9c37";
+        }
+        else if (getURL == "QnJhdm9UVg==")//BravoTV
+        {
+                keyId = "ad7fbbec39cea4a5a63ac13d94da48d4";
+                key = "f71087b4dc211db079237c0fb783eb93";
+        }
+        else if (getURL == "QzVO")//C5N
+        {
+                keyId = "050df5c6e78c774e78c3e99eef8a1b29";
+                key = "0e4141d6ab21a36cbc4da777ab3096d4";
+        }
+        else if (getURL == "QzlOX0M0")//C9N_C4
+        {
+                keyId = "646700eeb14cadfa0543a20cf413d37e";
+                key = "4fc037c462023764624d8446442cbbca";
+        }
+        if (getURL == "Q2FuYWwxMF9VUlU=") // Canal 10 uru
+        {
+                keyId = "8dd34782d754f8fcb1e8b38da9ffad0b";
+                key = "6fb97467c0f0ea13f86d41a70e029c51";
+        }
+        else if (getURL == "Q2FuYWxfMTJfQ0JB")//Canal_12_CBA
+        {
+                keyId = "90422640d3e846159fa450f83870ed4a";
+                key = "abb3cd94aece1a462df25a8f21085cca";
+        }
+        else if (getURL == "MjZfVFZfSEQ")//26_TV_HD
+        {
+                keyId = "e32aaa4b67430b3b51be1efce5a74ac5";
+                key = "ad60c5e1d378a97271bf8688f094d092";
+        }
+        else if (getURL == "Q2FuYWw0X1VSVQ==")//Canal4_URU 
+        {
+                keyId = "dabefaac89742589778fcfab78f08354";
+                key = "896dd914683b01c8044ffd34d7b6416b";
+        }
+        else if (getURL == "Q2FydG9vbk5ldHdvcms=") // CArton NeTwork
+        {
+                keyId = "d7df56efaa36a71141d238854cc46d1d";
+                key = "8abb2ee9150d8b2af8ebec0de0f833c8";
+        }
+        else if (getURL == "Qm9vbWVyYW5n")//Boomerang-cartonito
+        {
+                keyId = "5792e613fceb699c79cbc0e75fe4cd37";
+                key = "a672793730476ed23e5c1bce2ff570c6";
+        }
+        else if (getURL == "SU5DQUFfVHY=")//INCAA_Tv-CINE AR
+        {
+                keyId = "d44f40e49d2945c1a3701c0885ff0b00";
+                key = "6382b6279087402714b6824688c456df";
+        }
+        else if (getURL == "Q2luZWNhbmFsSEQ=")//CinecanalHD
+        {
+                keyId = "6003e92dd0d9f548329015c9e15dd578";
+                key = "213cf85cb5f9fe569757004a77e05948";
+        }
+        else if (getURL == "Q2luZW1heA==") // cinemax
+        {
+                keyId = "977928a92b82ba3781741a6470f8f45b";
+                key = "51f4e62827c128f7210b79a11587661a";
+        }
+        else if (getURL == "TWFnYXppbmU=")//ciudad Magazine
+        {
+                keyId = "4f1235069d34c22cb73d9b78bae15587";
+                key = "55e068ff6b152e34c66dc639b38e8692";
+        }
+        else if (getURL == "Q00=")//CM
+        {
+                keyId = "682f36b5736f4560951ca14b80d29524";
+                key = "3accb729067a39b3b8143f1b447b9d25";
+        }
+        else if (getURL == "Q29tZWR5Q2VudHJhbA")//ComedyCentral
+        {
+                keyId = "4013f784c5ef4318ad47024e61eb094e";
+                key = "bad433a547f97c7f65cda5e83b8dd416";
+        }
+        else if (getURL == "Q3JvbmljYVRW")//CronicaTV
+        {
+                keyId = "745e7abcc90d41ab706b2ac2f4371da3";
+                key = "50acd9d19d1361cb4a8a13a867bdc352";
+        }
+        else if (getURL == "RGlzY292ZXJ5SEQ=")//DiscoveryHD
+        {
+                keyId = "c283c84a7af0d7c8b9b612a8fb22a001";
+                key = "f45510c721eebd6eaa86a2e16ccbd77d";
+        }
+        if (getURL == "RGlzY292ZXJ5SG9tZUhlYWx0aEhE") // Discovery hyh
+        {
+                keyId = "9b0a76dd7a0df1e1b4320aeb1254d1a9";
+                key = "d011267775c38d6d2ab09b428c03d63f";
+        }
+        if (getURL == "SUQ=") // Discovery  id
+        {
+                keyId = "0956caf2e2bd41f49fdcead7cc94fe24";
+                key = "640c49578073a911938617eb4e652d6c";
+        }
+        else if (getURL == "RGlzY292ZXJ5X0tpZHM=") // Discovery Kids
+        {
+                keyId = "ffb2f0f63c23a3592d4653e938b9ca19";
+                key = "d3661ae881fc55fc7a15815cd439747b";
+        }
+        else if (getURL == "RGlzY292ZXJ5X1NjaWVuY2U=")//Discovery_Science
+        {
+                keyId = "46ba409fb04e40fb86b466d97e3a9588";
+                key = "f129fb9b5d213e20e2abe529b8cf2597";
+        }
+        else if (getURL == "VGhlYXRlcl9IRA==")//DISCOVERY Theater_HD
+        {
+                keyId = "5279c05ea51c4dae8e7fa6be88448089";
+                key = "b28dfafba4b848dfd5d7c177ebf19108";
+        }
+        if (getURL == "VExD") // Discovery TLC
+        {
+                keyId = "58761c7b2819491eb3a0d765842c341a";
+                key = "9dabc48f88bd7f266734e57501bd6f47";
+        }
+        if (getURL == "RGlzY292ZXJ5VHVyYm8=") // Discovery TURBO
+        {
+                keyId = "a611ddbf8c15fa617a0c391cb7b3e128";
+                key = "0cd1300baf8890380fd41124962195c4";
+        }
+        else if (getURL == "RGlzY292ZXJ5X1dvcmxkX0hE")//Discovery_World_HD
+        {
+                keyId = "34ee94c2263345f7a3a590661264e490";
+                key = "56757d656a697ab7a2e5e083b5d21bb5";
+        }
+        else if (getURL == "RGlzbmV5Q2hhbm5lbEhE")//DisneyChannelHD
+        {
+                keyId = "4a742e478d14023e1993e011d9415f94";
+                key = "0df77ede9bc744376836d21afa137dda";
+        }
+        else if (getURL == "RGlzbmV5SnI=") // Disney Junior
+        {
+                keyId = "bd29c4a538f28845ce33581111749428";
+                key = "46d9589f41a11c3637c07c604956deac";
+        }
+        else if (getURL == "RHJlYW13b3Jrcw==")//Dreamworks
+        {
+                keyId = "7f30c43e47544412221fd64201d92f4b";
+                key = "f83d09d75a0946b1d71aa48c201b4d8b";
+        }
+        else if (getURL == "RGlwdXRhZG9zX1RW")//Diputados_TV
+        {
+                keyId = "9666b195171442afd4551a8de01291a6";
+                key = "1c0061df9b4b098e40355167e97cfbf0";
+        }
+        else if (getURL == "Q2FuYWwxMlVSVQ==")//Tele
+        {
+                keyId = "dfde9d35d7438bfdf61da5dfac0557c1";
+                key = "acb13370c03a7254e2bb9cc9d2125017";
+        }
+        else if (getURL == "Q2FuYWw5")//Canal9
+        {
+                keyId = "24f4ff211136ae6512a1b552200db405";
+                key = "602122f8426c5c942b8c18d299cc6020";
+        }
+        else if (getURL == "QXJ0ZWFySEQ")//ArtearHD-EL TRECE
+        {
+                keyId = "5179017f49326d14af0a9ceec831aee6";
+                key = "09b4a463b029ebc28a288bed2da70a76";
+        }
+        else if (getURL == "RW5jdWVudHJv")//Encuentro
+        {
+                keyId = "ac3ae78beb64478ab390b4ad70e3e0c9";
+                key = "c7d669761c3516d852a0edf9e07c9198";
+        }
+        else if (getURL == "RV9FbnRlcnRhaW5tZW50X1RlbGV2aXNpb24=")//E_Entertainment_Television
+        {
+                keyId = "5883553207f13e3dc8cecd1113d5ba68";
+                key = "45434d40636dfa0e5312b93218e02185";
+        }
+        else if (getURL == "RXVyb2NoYW5uZWw=")//Eurochannel
+        {
+                keyId = "6f0fc214d9844a7590f0884d55b44c42";
+                key = "b2fe1bb5f9c79035301c328c1e93b0ee";
+        }
+        else if (getURL == "RXVyb25ld3M=")//Euronews
+        {
+                keyId = "d86b0f56d32f45adb0a6b4e488c8f0c2";
+                key = "e4f180b0e61be3e80ab602df5e56ff3f";
+        }
+        else if (getURL == "RXVyb3BhX0V1cm9wYQ")//Europa_Europa
+        {
+                keyId = "b47f257df0314d09a7f8355c3abe1dc6";
+                key = "bdc9f1696a82ee7398dd3a7fa82300e2";
+        }
+        else if (getURL == "RmlsbV9BcnRz")//Film_Arts
+        {
+                keyId = "91c540d350f34f5386f3f1c77f74001f";
+                key = "54ee72810551da0cba0c45a8df651962";
+        }
+        else if (getURL == "Rmxvd19NdXNpY19YUA==")//Flow_Music_XP
+        {
+                keyId = "b2aae44a74144be8b2118e20d1412bab";
+                key = "8a7ae996d12d8d5d5637d1044f8e08b7";
+        }
+        else if (getURL == "Rmxvd19NdXNpY18x")//Flow_Music_1
+        {
+                keyId = "f34cd7709f093d23d4db009107d96862";
+                key = "d8a829138d970b45e867c9733a31b2f0";
+        }
+        else if (getURL == "Rmxvd19NdXNpY18y")//Flow_Music_2
+        {
+                keyId = "596b599580b39ae2f3c413f7eae36902";
+                key = "2d7e3d5d31f68690fd877a111f84e8e3";
+        }
+        else if (getURL == "Rmxvd19NdXNpY18z")//Flow_Music_3
+        {
+                keyId = "e078b15ed770ec71f803c0ecc43de033";
+                key = "7010bccda544f74d1b425c4cebd082d4";
+        }
+        else if (getURL == "RXZlbnRvc19IRF9VeQ==") // Flow_Eventos 1 UY
+        {
+                keyId = "48d0e34c8797c5c2a742d2630a8fb975";
+                key = "fb5d12b9d8febe836e5670abd003ddca";
+        }
+        else if (getURL == "Rm9vZF9OZXR3b3Jr")//Food_Network
+        {
+                keyId = "6ca0fbad21a0e908c0280dcc27e6ee0e";
+                key = "62670eedbafdf9360b4ecaed738e26cd";
+        }
+        else if (getURL == "Rm94X05ld3M=")//Fox_News
+        {
+                keyId = "3fe3f31a5e7b48a1b548e9364757ce66";
+                key = "32993fc281207fe915f6f1e990957868";
+        }
+        else if (getURL == "RlhIRA==")//FXHD
+        {
+                keyId = "9ab9c42c713e0fb5517dc77cc19d6755";
+                key = "d8c271b82387e609b6c19e5e79240aff";
+        }
+        else if (getURL == "RWxfR2FyYWdl")//El_Garage
+        {
+                keyId = "03d1dfb8df034d8b81e57753df00a36d";
+                key = "08d83660db4a73bb1d61d60b09df5f4d";
+        }
+        else if (getURL == "R0VOX1RW")//GEN_TV
+        {
+                keyId = "49eb924ba998ca7fbbaee30dcef1ecb4";
+                key = "6e131b04b2e87598fb588ac205673698";
+        }
+        else if (getURL == "R2xpdHo=")//Glitz NO FUNCIONA
+        {
+                keyId = "f812ef81d6ce425a8db4012a1ef8b0c1";
+                key = "5c2b9791b1074727eb349588e32bdc0a";
+        }
+        else if (getURL == "R291cm1ldA==")//Gourmet
+        {
+                keyId = "93d853ac4c8e24cf0295f6f97ee53bd3";
+                key = "fa5817fab4fb054ccea1abb9f3d767ed";
+        }
+        else if (getURL == "SEJPSEQ=") // HBO 
+        {
+                keyId = "5317283f4110fac3fb3a0becd9f648bc";
+                key = "0754a03c926b1247216e01d9dbcfac28";
+        }
 
-if (typeof getURL !== 'undefined' && getURL !== null) {
-  var errorCount = sessionStorage.getItem('errorCount');
-  if (!errorCount) {
-    errorCount = 0;
-  } else {
-    errorCount = parseInt(errorCount);
-  }
+        else if (getURL == "SEJPXzI=") // HBO 2
+        {
+                keyId = "c90cc57ad2c436e5a77db2f8d9db2d85";
+                key = "04f6c73984bdcffd013050608497935d";
+        }
+        else if (getURL == "SEJPX0ZhbWlseQ==") // HBO Family
+        {
+                keyId = "535473132f68082160b489482ca35f8e";
+                key = "e90fd91fcd3fc809bed2b1c0d37f7297";
+        }
+        else if (getURL == "SEJPX011bmRp") // HBO Mundi
+        {
+                keyId = "7821b2662148fe333d5191acbb8a5c1f";
+                key = "ae43f3e2545237ebda58b13813b5d328";
+        }
+        else if (getURL == "SEJPX1BsdXM=") // HBO Plus
+        {
+                keyId = "f0e7f7d458990edfab7b98b412564615";
+                key = "79205754b7f84a62661c2dbe9de5dd5d";
+        }
+        else if (getURL == "SEJPX1BPUA==") // HBO POP
+        {
+                keyId = "f4e1ce5cef7e9a110fe968f8881b21fa";
+                key = "6bbe2062b150b11496cdd5fbdd9c89d6";
+        }
+        else if (getURL == "SEJPX1NpZ25hdHVyZQ==") // HBO Signature
+        {
+                keyId = "e866499fbc1149f49989672075aa3a68";
+                key = "d2dd5c95623c6343240981c2202fc311";
+        }
+        else if (getURL == "SEJPX0V4dHJlbWU=") // HBO Xtreme
+        {
+                keyId = "d504011bbef467c0de3a7534e302a6d4";
+                key = "334103e2abe16faa7f9ab2e3097c5a58";
+        }
+        if (getURL == "SGlzdG9yeUhE") // History Channel
+        {
+                keyId = "e82318e518ba70cea3d7b37bef99e692";
+                key = "a05fcb634c071a514e3039e1c274b4db";
+        }
+        if (getURL == "SGlzdG9yeV8y") // History Channel 2
+        {
+                keyId = "ecbe97ec34784304b390a12ba3854ccf";
+                key = "5a0ee36ed9b8920cb19546fd92f2d415";
+        }
+        else if (getURL == "SG9sYV9UVg==")//Hola_TV
+        {
+                keyId = "5d759477f0ad1bdef2c6de09e7c275fd";
+                key = "82cc6eea185eecc934df95adfbbf9dbc";
+        }
+        else if (getURL == "SVNBVA==")//ISAT
+        {
+                keyId = "db764164934a48749a7a01bd015694f3";
+                key = "512f3c8869af45e6e5dd1525b6a77867";
+        }
+        else if (getURL == "TGFfTmFjaW9u")//La_Nacion
+        {
+                keyId = "f4eade7bbc39b25402acfa301bbad04a";
+                key = "a74d1df4235a74878327aa8d53ff283c";
+        }
+        else if (getURL == "Q2FuYWxfZGVfbGFzX2VzdHJlbGxhcw==")//canal Las estrellas
+        {
+                keyId = "b37d85be9d2b4b619f945beff713fda3";
+                key = "917309c98f072b0bd484dd6560c6d166";
+        }
+        else if (getURL == "TEFfVEVMRV9DNA==")//LA_TELE_C4
+        {
+                keyId = "7c6a481adf6a080ec09637d3f25989cf";
+                key = "036e343d636b821ab81838de387b62cb";
+        }
+        else if (getURL == "TGlmZXRpbWU=")//Lifetime
+        {
+                keyId = "eae51b1d67ff47adac7b6bd3a4b1120a";
+                key = "b4d6bb47193f33ffc12379cdc447455d";
+        }
+        else if (getURL == "TWFzX0NoaWM=")//Mas_Chic
+        {
+                keyId = "dac8ff1688994efd898222acdd05cafc";
+                key = "22fdf97c7233667518258ed16ccb2545";
+        }
+        else if (getURL == "TWV0cm8")//Metro
+        {
+                keyId = "719aa3a5e270c7f69eba374ed80d7986";
+                key = "97ac59118cf4cf242e2c31e87cd38e1e";
+        }
+        else if (getURL == "TVRWX0hE")//MTV_HD
+        {
+                keyId = "0c9eb3ead38a122ac460ad96a8ebfd2e";
+                key = "66bfbfa4449eb8bc1bcf7577d5bffaad";
+        }
+        else if (getURL == "TVRWMDA=")//MTV00
+        {
+                keyId = "1f0c09ed9e5841cf867ba6eb3cdfd61d";
+                key = "802c89c6bae6a245aaafcf40c1986fc1";
+        }
+        else if (getURL == "TVRWX0hpdHM=")//MTV_Hits
+        {
+                keyId = "61008dfc867544cd872de99b1f2b82cf";
+                key = "716449756316b91c54803aaa22a2fbf0";
+        }
+        if (getURL == "TmF0R2VvSEQ=") // NATGEO
+        {
+                keyId = "4be0c61ceddc62294cc9e23b627af53d";
+                key = "852c1935d11c3c53d0a1ceff3bb3bf16";
+        }
+        else if (getURL == "TmF0R2VvSEQ=")//NatGeoHD
+        {
+                keyId = "4be0c61ceddc62294cc9e23b627af53d";
+                key = "852c1935d11c3c53d0a1ceff3bb3bf16";
+        }
+        else if (getURL == "TmV0X1RW")//Net_TV
+        {
+                keyId = "89d433166edd31d56df2a59df8ec6704";
+                key = "b2015faded0a456d10aa8db1b4cbac68";
+        }
+        else if (getURL == "Tmlja2Vsb2Rlb24=") // NICK
+        {
+                keyId = "61c18cefecc2d067beaa9ff181305345";
+                key = "38d6f650cbf9a38fd9f35c01f98e647a";
+        }
+        else if (getURL == "Tmlja19Kcg==")//Nick_Jr
+        {
+                keyId = "e824b2277a86fd6adfc40aa948e5064a";
+                key = "28da2dbbe8e1a1463bbb23895b922083";
+        }
+        else if (getURL == "Tk9USUNJQVNfUFlfQzQ=")//NOTICIAS_PY_C4
+        {
+                keyId = "8f66fe15735b2b1b3d5eb3646caa405e";
+                key = "404b93fd7b499b1061c9a714e1cdb2d0";
+        }
+        else if (getURL == "UGFyYWd1YXlfVFY=")//Paraguay_TV
+        {
+                keyId = "68a5bd6c58e6c05bacfd18d3feec31f2";
+                key = "ae23f8357512df2dfabcb8104b078182";
+        }
+        else if (getURL == "UGFyYW1vdW50")//Paramount
+        {
+                keyId = "b85b710ecff3e38f31fc8e249b1c1cef";
+                key = "a1544c193dde6f8858c9358ee69a60a7";
+        }
+        else if (getURL == "UEFSQVZJU0lPTl9DNA==")//PARAVISION_C4
+        {
+                keyId = "bd8e8c9b32ef027e8ff4ff0cfce855a4";
+                key = "2918e9893b570c3fa1f215b52a12cc91";
+        }
+        else if (getURL == "UEFLQV9QQUtB")//PAKA_PAKA
+        {
+                keyId = "334001b2f2644df9bdf35e92d2b89f8f";
+                key = "475ec87d86ed0636dbb6d6d9d4a43bb7";
+        }
+        else if (getURL == "UXVpZXJvX0hE")//Quiero_HD
+        {
+                keyId = "a354b0c82a3a720c4a6f52ed5a1190f4";
+                key = "45a76dcc84f058cfabc8b958d7303b28";
+        }
+        else if (getURL == "UkFJ")//RAI
+        {
+                keyId = "d214547d7d9a4011a39a899ce6e70071";
+                key = "16c2ed0617cf1e123f3af6ea8875a82d";
+        }
+        else if (getURL == "U05UX0M0")//SNT_C4
+        {
+                keyId = "9f61dcce871cc41aeb206d05028fc30a";
+                key = "9f6248194a3bf5e35b96b194e8624693";
+        }
+        else if (getURL == "U29ueUhE") // Sony Channel
+        {
+                keyId = "fd9619f9d7c2d5115a339941279e0b4b";
+                key = "bf55635e6591f905659fa27ab3ca2812";
+        }
+        else if (getURL == "U29ueV9Nb3ZpZXM=") // Sony Movie
+        {
+                keyId = "88b9c41e72acd5b589bbfb4776969781";
+                key = "43b9403f7a9e28fc2d7cbf10373b85aa";
+        }
+        else if (getURL == "U3BhY2U=")//Space
+        {
+                keyId = "0942e4ecd1bd3567e8f9447f45c20a12";
+                key = "efca6264f04cf7373de0c30ec79fe909";
+        }
+        else if (getURL == "Rk9YSEQ=")//STAR-FOXHD
+        {
+                keyId = "8023e85ef9d17561ee1b424179b1b15e";
+                key = "477ad189f1fcd2baec026068107f862f";
+        }
+        else if (getURL == "U3R1ZGlvX1VuaXZlcnNhbA==")//Studio_Universal
+        {
+                keyId = "d9b541e3cd064d569843da42788d4263";
+                key = "bba5d26ad5051fb3f2cf7e3dd8a4a7d8";
+        }
+        else if (getURL == "U3VuX0NoYW5uZWw=")//Sun_Channel
+        {
+                keyId = "158177692aa3463eae5f4e1f72403e9c";
+                key = "1c6c026fba9cf7ecb576c7bedce0ead4";
+        }
+        else if (getURL == "U3lGeQ==")//SyFy
+        {
+                keyId = "9cd99cbb466c42e5b33e7a2ef7e2c7df";
+                key = "18d9faccdaf2d15807d0a3f713e8b2a4";
+        }
+        else if (getURL == "VENN") // TCM
+        {
+                keyId = "a5f44a5e30714cf3bcee7c7f15a08b4e";
+                key = "c3c141ae941ab9750339c3af45a65ce2";
+        }
+        else if (getURL == "VGVsZXN1cg==")//Telesur
+        {
+                keyId = "5235d8ee29f14ce6b26ea5d828aee77a";
+                key = "6bf6bd339e3098babc2ab0b984cd2376";
+        }
+        else if (getURL == "VGVsZWZlSEQ=")//TelefeHD
+        {
+                keyId = "3cec1b1ea9799dda5596e64f37e5ed20";
+                key = "c69f3afde2085dcaaaddbf55246a0323";
+        }
+        else if (getURL == "Q05OX2VuX0VzcGFub2w=") //CNN
+        {
+                keyId = "0b20ed9da0e5457c9dfd3ae0b6092491";
+                key = "98997a7020c18cb28174a2490147830a";
+        }
+        else if (getURL == "VGVsZW11bmRvX0hE") //Telemundo
+        {
+                keyId = "53d752e4649dadd808d913985f86ee77";
+                key = "d1fd24db1b61d634cabfc44538ce9b0e";
+        }
+        else if (getURL == "UGFzaW9uZXM=") //Pasiones
+        {
+                keyId = "d41cf825e878f0d8e276218af7f5b7e1";
+                key = "13d1b73ab578ab8623be9347bcf8972a";
+        }
+        else if (getURL == "Q2FuYWxfOF9DQkE")//Canal_8_Cordoba-TELEFE
+        {
+                keyId = "103ce214b4d04c8eb4dd43670e956dad";
+                key = "20e030576b8dc4df0d1c68e16af3bc0f";
+        }
+        else if (getURL == "Q2FuYWxfOF9UdWN1bWFu")//Canal_8_Tucuman-TELEFE
+        {
+                keyId = "7760caa058b51b7cce151c0539fa4a8f";
+                key = "edd086c1011ed2c54cbe869d0e8d9289";
+        }
+        else if (getURL == "Q2FuYWxfNV9Sb3Nhcmlv")//Canal_5_Rosario-TELEFE
+        {
+                keyId = "c61b5ac8e1664bf5b544e92ea2597e1c";
+                key = "938437ac25f0a18e04efc1a083489edc";
+        }
+        else if (getURL == "VGVsZWZlX1NhbHRh")//Telefe_Salta
+        {
+                keyId = "6c7a5de392f874308e4dd8f2837f1115";
+                key = "9ccf9ec6922c403d67d0df7952547581";
+        }
+        else if (getURL == "VGVsZWZlX05ldXF1ZW4=")//Telefe_Neuquen
+        {
+                keyId = "55828b728b8affe6d1d57d050025645d";
+                key = "8ac11ed6d0ccaeac3f8218419f65bb94";
+        }
+        else if (getURL == "VEVMRUZVVFVST19DNA==")//TELEFUTURO_C4
+        {
+                keyId = "5d2731cf8a59b73438ef59d88cd882bf";
+                key = "3f412fa6368b7db4903588de695377e1";
+        }
+        else if (getURL == "VGVsZW1heA")//Telemax
+        {
+                keyId = "e7ec364ad6854fedad797538cb58780d";
+                key = "57dfb3fca2ca35b37ff81c35595e9be8";
+        }
+        else if (getURL == "VG9kb05vdGljaWFz")//TodoNoticias-TN
+        {
+                keyId = "7ceb1cd0622cd7e88fcdc99fe3a55de6";
+                key = "951637093d41c7388a1ef3f620cfea21";
+        }
+        else if (getURL == "VE5UX0hEX0FyZw")//TNT_HD_Arg
+        {
+                keyId = "faad1722a575f4d9ec7b774db63c879c";
+                key = "cf0184830344ba36ad2ffef9dd2dd9d0";
+        }
+        else if (getURL == "VEJT") // TNT Novelas (TBS)
+        {
+                keyId = "49a0179b034ae899cb67d8a5834181aa";
+                key = "486e2c6d69adea7e17f2960e8e366612";
+        }
+        else if (getURL == "VE5UU2VyaWVz") // TNT Series
+        {
+                keyId = "5c14d6aeb19bf113edf91a7b544253cb";
+                key = "8d776d6f9c5c840ebe88d767dd731692";
+        }
+        else if (getURL == "VHZfQ2hpbGU=")//Tv_Chile
+        {
+                keyId = "c5d0d76e24844235988f9265619e5fec";
+                key = "446b71a6deb806c6f129e25de999d07c";
+        }
+        else if (getURL == "VGV2ZV9DaXVkYWQ=")//Teve_Ciudad
+        {
+                keyId = "9b536cd1716647ee94c45fa4836d29d6";
+                key = "d691c88a95440666742d1d8183182347";
+        }
+        else if (getURL == "Q2FuYWw3")//TV PUBLICA-Canal7
+        {
+                keyId = "cc8c82ac2ec7e9799527c29db7354e81";
+                key = "cc4aae173dd2ef17ae26be3f7ae87662";
+        }
+        else if (getURL == "VFY1X01vbmRl")//TV5_Monde
+        {
+                keyId = "62034ff5988b4787b17cdf6f751a3142";
+                key = "b3938f0af28b4c0c082b0d4210e389a0";
+        }
+        else if (getURL == "VFZfRXNwYW5h")//TV_Espana-TVE
+        {
+                keyId = "53e0a3741e2e4ff5843f165b53309088";
+                key = "45095caabd9a359cd7ea3910d865d643";
+        }
+        else if (getURL == "VHJ1VFY=") // TruTV
+        {
+                keyId = "7d0cecffe9c29734343cf9983978c1a1";
+                key = "f86b5ac05f2a2626b6c61bd4e13344d8";
+        }
+        else if (getURL == "VW5pdmVyc2FsX0NoYW5uZWxfSEQ=")//Universal_Channel_HD
+        {
+                keyId = "6cf9a13d6fd65a0f2e1cee3969aab9f5";
+                key = "ea61c3c1adee71b5c2e9744e41d4b75f";
+        }
+        else if (getURL == "Vm9sdmVy")//Volver
+        {
+                keyId = "194e53184a424ce6989ad82c5f28fbc5";
+                key = "65d60c5cc4de031172be0a6a51edbdfe";
+        }
+        else if (getURL == "V2FybmVySEQ=")//WarnerHD
+        {
+                keyId = "069bd3f0b6c279467e08549f17bf5bd0";
+                key = "5afa7e369a6de1093818a85af912a775";
+        }
+        else if (getURL == "V09CSQ==")//WOBI
+        {
+                keyId = "f2e44a719947ebfe37de527a9d6df71e";
+                key = "029bddeb08909dd66a80276fc338d692";
+        }
+        else if (getURL == "UGxheWJveQ")//Playboy
+        {
+                keyId = "8577d81eaf33436d9f1e482360685a7c";
+                key = "f608a0ac703cfaaf9442574d9a2b87fb";
+        }
+        else if (getURL == "VmVudXM=")//Venus
+        {
+                keyId = "34237d2ae6684ee7a011f5b9c7c43e6d";
+                key = "05d973d987915120e567880f50a422af";
+        }
+        else if (getURL == "U2V4dHJlbWU")//Sextreme
+        {
+                keyId = "95bd64227acf458daf7886f803d0298e";
+                key = "79e28ee0ec58958bb666f9e53a0cd434";
+        }
+        else if (getURL == "SFRW")  // HTV
+        {
+                keyId = "daecef5fe32f4ce083c6a0c692755d6a";
+                key = "d4227f24389a9ba77293214b93eb0d7d";
+        }
+        else if (getURL == "SW52ZXN0aWdhY2lvbl9QZXJpb2Rpc3RpY2E=")  // IP Noticias
+        {
+                keyId = "5299f96f873aa0f0e47edc4e15784717";
+                key = "9d53176b0969492f2d93f1867be1dce1";
+        }
+        else if (getURL == "UlBDX0M0")  // el trece py
+        {
+                keyId = "a8093cdcb2d504bd38f16764bd21b6e5";
+                key = "bfcf3b033b5f0b5ae020751a6746326f";
+        }
+        else if (getURL == "QWR1bHRfU3dpbQ==") // AS
+        {
+                keyId = "9be1432e1e594c8d0648a44d3d9f0c46";
+                key = "8e6c785b14d973c504074b1920f11b15";
+        }
+        if (getURL == "Q2FuYWxfZGVfbGFfY2l1ZGFk") // El Canal de la Ciudad
+        {
+                keyId = "5ee7842b3cf24d1dba088365fa5d0543";
+                key = "69cec006409823c06fbf2866a231b4f7";
+        }
 
-  playerInstance.on("error", function() {
-    errorCount++;
-    var redirectUrl = 'https://canso30-11-lflooovariaaaoos.github.io/cantoooosfloarg.html?get=' + getURL;
 
-    if (getLang) {
-      redirectUrl += '&lang=' + getLang;
-    }
+        var mt = ["chromecast", "cdn"];
+        // var mt = ["cdn"];
+        // var mt = ["chromecast01", "cdn01"];
+        // var mt = ["chromecast02", "cdn02"];
+        // var mt = ["chromecast03", "cdn03"];
+        // var mt = ["chromecast04", "cdn04"];
+        // var mt = ["chromecast05", "cdn05"];
 
-    redirectUrl += '&start=true';
-    sessionStorage.setItem('errorCount', errorCount);
-    window.location = redirectUrl;
-  });
-}
+        // var mt = ["cdn", "edge-mix01-mus", "edge-mix03-mus"];
+        // var mt = ["edge-mix02-cte", "edge-live02-cen"];
 
-var selectedLanguage = getLang || 1;  
-var languageChangedDuringPlay = false;
+        // var mt = ["edge-mix02-cte"];
+        // var mt = ["chromecast"];
 
-jwplayer().on('play', function(e) {
-  if (!languageChangedDuringPlay) {
-    var currentLanguage = jwplayer().getCurrentAudioTrack();
-    if (currentLanguage !== selectedLanguage) {
-      jwplayer().setCurrentAudioTrack(selectedLanguage);
-      languageChangedDuringPlay = true;
-    }
-  }
-});
+        // var mt = ["edge10-hr"];
 
-jwplayer().on('complete', function(e) {
-  languageChangedDuringPlay = false;
-});
 
-function getParameterByName(name) {
-  var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
-  return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
-}
+        // var mt = ["smt-edge01","smt-edge02","smt-edge03"];
+        // var mt = ["edge-live01-bel"];
+
+        // https://smt-edge03.sensa.com.ar/live/eds/Telefe/live_dash_cld/Telefe.mpd?ck=eyI5YmI1NGZjY2ZmYWRkZDM4OTE2ZTg1YzA4ZGU5OGNjOSI6ImQwNmY1MDljNDE4ZWI2ZjFiMmZjMmI3NjY0NDUzMjhiIn0=&headers=eyJvcmlnaW4iOiJodHRwczovL3BsYXllci5zZW5zYS5jb20uYXIiLCJyZWZlcmVyIjoiaHR0cHM6Ly9wbGF5ZXIuc2Vuc2EuY29tLmFyLyJ9
+
+        // var mt = ["edge-live01-nyc",
+        //         "edge-live02-nyc",
+        //         "edge-live01-mia",
+        //         "edge-live02-mia",
+        //         "edge-live01-lax",
+        //         "edge-live02-lax",
+        //         "edge-live01-mex",
+        //         "edge-live02-mex",
+        //         "edge-live01-mad",
+        //         "edge-live02-mad"];
+
+        // var mt = [ "edge-live02-cen", "edge-mix01-cte", "edge-mix02-cte", "edge-live01-cte","edge-mix01-res", "edge-live01-ros","edge-mix01-neh"];
+
+        //     var mt = [ "chromecast", "cdn",
+        //                 "edge-live01-mun", "edge-live02-mun", "edge-live11-hr", "edge-live12-hr", 
+        //                 "edge-live13-hr", "edge-live14-hr", "edge-live15-hr", "edge-live16-hr", 
+        //                 "edge-live17-hr", "edge-live31-hr", "edge-live32-hr", "edge-live34-hr", 
+        //                 "edge-live11-sl", "edge-live12-sl", "edge-live13-sl", "edge-live15-sl", 
+        //                 "edge-live17-sl", "edge-live31-sl", "edge-vod02-sl", "edge-vod04-sl", 
+        //                 "edge-vod06-sl", "edge9-sl", "edge10-sl", "edge-vod01-hr", "edge-vod03-hr", 
+        //                 "edge-vod04-hr", "edge1-ccast-sl", "edge2-ccast-sl", "edge6-ccast-sl", 
+        //                 "edge-live01-cen", "edge-live03-cen", "edge-mix02-cte", "edge-vod01-cen", 
+        //                 "edge-live01-cte", "edge-live01-coe", "edge-mix01-coe", "edge-mix02-coe", 
+        //                 "edge-mix03-coe", "edge-mix04-coe", "edge-mix05-coe", "edge-mix01-ird", 
+        //                 "edge-mix02-ird", "edge-mix01-mus",  "edge-mix03-mus"
+        //             ];
+
+        // var mt = ["edge-live02-mun", "edge-live01-bel", "edge-live02-bel", "edge-live11-hr", 
+        // "edge-live12-hr", "edge-live13-hr", "edge-live14-hr", "edge-live15-hr",
+        //  "edge-live16-hr", "edge-live17-hr", "edge-live31-hr", "edge-live32-hr",
+        //  "edge-live11-sl", "edge-live12-sl", "edge-live13-sl", "edge-live15-sl",
+        //  "edge-live16-sl", "edge-live17-sl", "edge-live31-sl", "edge-live32-sl",
+        //  "edge-vod02-sl", "edge-vod04-sl", "edge9-sl", "edge10-sl"];
+
+        var playerInstance = jwplayer("player");
+
+        var random;
+        function initializePlayer(autoplay) {
+                random = Math.floor(Math.random() * mt.length);
+                console.log("Selected mt:", mt[random]);
+
+
+                var mpd = "//" + mt[random] + ".cvattv.com.ar/live/c" + number + "eds/" + atob(getURL) + "/SA_Live_dash_enc/" + atob(getURL) + ".mpd";
+                // var mpd = "//" + mt[random] + ".sensa.com.ar/live/c" + number + "eds/" + atob(getURL) + "/SA_Live_dash_enc/" + atob(getURL) + ".mpd";
+                // var mpd = "//cdn.sensa.com.ar/live/eds/" + atob(getURL) + "/live_dash_cld/" + atob(getURL) + ".mpd";
+                // var mpd = "//cdn.trimi.com.ar/live/sm-live/" + atob(getURL) + "/sa_live_dash/" + atob(getURL) + ".mpd";
+                // var mpd = "cdn-lumen01.sensa.com.ar/live/c" + number + "eds/" + atob(getURL) + "/SA_Live_dash_enc/" + atob(getURL) + ".mpd";
+                // var mpd = "//" + mt[random] + ".trimi.com.ar/live/c" + number + "eds/" + atob(getURL) + "/SA_Live_dash_enc/" + atob(getURL) + ".mpd";
+                // var mpd = "//dns2.vertv.net.ar/live/c" + number + "eds/" + atob(getURL) + "/SA_Live_dash_enc/" + atob(getURL) + ".mpd";
+                // var mpd = "https://cdnlb.tvplayhome.lt/live/c" + number + "eds/" + atob(getURL) + "/SA_Live_dash_enc/" + atob(getURL) + ".mpd";
+                // var mpd = "//cdn.bitmovin.com/live/c" + number + "eds/" + atob(getURL) + "/SA_Live_dash_enc/" + atob(getURL) + ".mpd";
+                // var mpd = "//anbalancer.express.com.ar/live/c" + number + "eds/" + atob(getURL) + "/SA_DASH_cipix/" + atob(getURL) + ".mpd?dvr_window_length=30&token=oQmZpd0aBsv66QU5fd1SBxT1d7eSRIKT";
+                // var mpd = "//tbx.dtvott/live/c" + number + "eds/" + atob(getURL) + "/SA_Live_dash_enc/" + atob(getURL) + ".mpd?dvr_window_length=30&token=oQmZpd0aBsv66QU5fd1SBxT1d7eSRIKT";
+                //       console.log("Canal: "+atob(getURL)+"\nLink: "+mpd);
+
+                playerInstance.setup({
+                        playlist: [{
+                                title: "",
+                                description: "canalesonline.netlify.app",
+                                "sources": [
+                                        {
+                                                "default": false,
+                                                "type": "dash",
+                                                "file": mpd,
+                                                "drm": {
+                                                        "clearkey": { "keyId": keyId, "key": key }
+                                                },
+                                                "label": "HD",
+                                                audiolang: "es" // Forzar idioma español si es compatible
+                                        }
+                                ]
+                        }],
+                        width: "100%",
+                        height: "100%",
+                        autostart: true,
+                        mute: false,
+                        cast: {},
+                        sharing: {},
+                        androidhls: true,
+                        displaytitle: true,
+                        stretching: "uniform",
+                });
+
+        }
+
+
+
+
+
+
+        var getLang = getParameterByName('lang');
+        if (getLang === null || getLang === "") {
+                var lang = 1;
+        } else {
+                var lang = parseInt(getLang);
+        }
+
+        jwplayer().on('play', function (e) {
+                jwplayer().setCurrentAudioTrack(lang);
+        });
+
+
+        function tryInitialize() {
+                initializePlayer(false);
+                playerInstance.on('error', function (e) {
+                        if (e.code === 241401 || e.code === 241403) {
+                                setTimeout(tryInitialize, 1000);
+                        }
+                });
+        }
+
+        function checkAndInitialize() {
+                random = Math.floor(Math.random() * mt.length);
+                var mtUrl = "//" + mt[random] + ".cvattv.com.ar";
+                checkMtStatus(mtUrl, function (status) {
+                        if (status === 200) {
+                                initializePlayer(true);
+                        } else {
+                                setTimeout(checkAndInitialize, 1000);
+                        }
+                });
+        }
+
+        function checkMtStatus(mtUrl, callback) {
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4) {
+                                callback(xhr.status);
+                        }
+                };
+                xhr.open('HEAD', mtUrl, true);
+                xhr.send();
+        }
+
+        tryInitialize();
+
+        if (typeof getURL !== 'undefined' && getURL !== null) {
+                var errorCount = sessionStorage.getItem('errorCount');
+                if (!errorCount) {
+                        errorCount = 0;
+                } else {
+                        errorCount = parseInt(errorCount);
+                }
+
+                playerInstance.on("error", function () {
+                        errorCount++;
+                        // alert("Falla: "+mt[random])
+                        // var redirectUrl = 'https://canso30-11-lflooovariaaaoos.github.io/cvattv.html?get=' + getURL;
+                        var redirectUrl = 'cvatt2.html?get=' + getURL;
+
+
+                        if (getLang) {
+                                redirectUrl += '&lang=' + getLang;
+                        }
+
+                        redirectUrl += '&start=true';
+                        sessionStorage.setItem('errorCount', errorCount);
+                        window.location = redirectUrl;
+                });
+        }
+
+        var selectedLanguage = getLang || 1;
+        var languageChangedDuringPlay = false;
+
+        jwplayer().on('play', function (e) {
+                if (!languageChangedDuringPlay) {
+                        var currentLanguage = jwplayer().getCurrentAudioTrack();
+                        if (currentLanguage !== selectedLanguage) {
+                                jwplayer().setCurrentAudioTrack(selectedLanguage);
+                                languageChangedDuringPlay = true;
+                        }
+                }
+        });
+
+        jwplayer().on('complete', function (e) {
+                languageChangedDuringPlay = false;
+        });
+
+        function getParameterByName(name) {
+                var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+                return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+        }
+
 </script>
- <div id="error-message" style="display: none; color: green; font-weight: bold;"></div>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"8ea708f40b3ff1a7","version":"2024.10.5","r":1,"token":"8e9f33a443e0474686e22ff229f9574a","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}}}' crossorigin="anonymous"></script>
