@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/shaka-player@4.15.3/dist/shaka-player.compiled.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/shaka-player@4.15.3/dist/controls.min.css" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.12.6/controls.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.12.6/shaka-player.ui.min.js"></script>
+  
+  <script src="
+https://cdn.jsdelivr.net/npm/shaka-player-hv@0.0.7/dist/shaka-player.compiled.debug.min.js
+"></script>
+  
+    <style>
+        body {
+            margin: 0;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+ 
+        .shaka-video-container {
+            position: relative; /* Fill the entire screen */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+ 
+        video {
+            width: 100%;
+            height: 100%; /* Fullscreen video */
+            object-fit: cover; /* Maintain aspect ratio */
+        }
+      
+    </style>
+</head>
+<body>
+ 
+    <div data-shaka-player-container="" class="shaka-video-container" shaka-controls="true">
+        <video autoplay="false" preload='none' data-shaka-player="" id="video" class="shaka-video"></video>
+    </div>
+ 
+    <script>
+        const videoConfigs = {
+           "tiiioon1": {
+                url: "https://d2jluxxgx550su.cloudfront.net/out/v1/62de20495af84f908fa8963f50c44d46/index.mpd",
+                k1:   "49b2c0e7037042b2aff9f064e0bb3311",
+                k2: "83849e30adf85440550292693147fbf7"
+            },
+           "tiiioon2": {
+                url: "https://d3kzwqwnq1f7tq.cloudfront.net/out/v1/25ca218d53194065bedf6d998ace462e/index.mpd?dvr_window_length=30",
+                k1: "1c62a216a5fe423f959cb1ca02f62d83",
+                k2: "54f2fdc83c1da33cd9269bf21e08218c"
+            },
+            "tiiioon3": {
+                url: "https://sam-py-edge05.tigo.com.py/ccur-session/f9de91d275e9428d9b2020eaf9c3772017462185850761b65a320aeed11ebae01d90082191a3coPufp9yYB3qqtMFbxeMGTmPz/out/v1/62de20495af84f908fa8963f50c44d46/index.mpd?dvr_window_length=26&ccur_st=0&ccur_et=0&ccur_fmt_type=fmp4",
+                k1:  "49b2c0e7037042b2aff9f064e0bb3311",
+                k2: "83849e30adf85440550292693147fbf7"
+            },
+            
+        }
+ 
+        function getQueryParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+
+/**
+ * Stops and destroys
+ */
+function stopVideo() {
+  if(videoPlayer !== null) {
+    video.play();
+    video.style.display = "none";
+    video.currentTime = 0;
+    window.video = null;
+    player.unload();
+    player.destroy();
+    videoPlayer = null;
+    root.style.display = "block";
+
+  }
+}
+        async function init() {
+            const video = document.getElementById('video');
+            const ui = video['ui'];
+            const controls = ui.getControls();
+            const player = controls.getPlayer();
+            const id = getQueryParameter('id');
+            const config = videoConfigs[id];
+          
+          
+ 
+            if (!config) {
+                console.error('No valid configuration found for the provided id.');
+                return;
+            }
+ 
+            const playerConfig = {
+              addSeekBar: false,
+      addBigPlayButton: true,
+                seekBarColors: {
+        base: "rgba(255, 255, 255, 0.3)",
+        buffered: "rgba(255, 255, 255, 0.54)",
+        played: "rgb(255, 255, 255)",
+        },
+                controlPanelElements: [
+        'play_pause',
+        'time_and_duration',
+        'spacer',
+        'mute',
+        'volume',
+             'quality',              
+                  
+        'fullscreen',
+        
+      ],
+ 
+      statisticsList: [
+        'width',
+        'height',
+        'corruptedFrames',
+        'decodedFrames',
+        'droppedFrames',
+        'drmTimeSeconds',
+        'licenseTime',
+        'liveLatency',
+        'loadLatency',
+        'bufferingTime',
+        'manifestTimeSeconds',
+        'estimatedBandwidth',
+        'streamBandwidth',
+        'maxSegmentDuration',
+        'pauseTime',
+        'playTime',
+        'completionPercent',
+      ],
+      contextMenuElements: [
+        'loop',
+        'picture_in_picture',
+        'statistics',
+      ],
+              
+              
+              
+              
+                playbackRates: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2],
+            };
+          config['castReceiverAppId'] = '7B25EC44';
+
+            ui.configure(playerConfig);
+ 
+     
+            player.configure({
+               
+              
+              textDisplayer: {
+      fontScaleFactor: 1.5,
+   },
+                drm: {
+                    clearKeys: {
+                        [config.k1]: config.k2
+                    }
+                }
+            });
+ 
+            window.player = player;
+            window.ui = ui;
+ 
+            player.addEventListener('error', onPlayerErrorEvent);
+            controls.addEventListener('error', onUIErrorEvent);
+ 
+            try {
+                await player.load(config.url);
+                console.log('The video has now been loaded!');
+            } catch (error) {
+                onPlayerError(error);
+            }
+        }
+ 
+        function onPlayerErrorEvent(errorEvent) {
+            onPlayerError(errorEvent.detail);
+        }
+ 
+        function onPlayerError(error) {
+            console.error('Error code', error.code, 'object', error);
+        }
+ 
+        function onUIErrorEvent(errorEvent) {
+            onPlayerError(errorEvent.detail);
+        }
+ 
+        function initFailed(errorEvent) {
+            console.error('Unable to load the UI library!');
+        }
+ 
+        document.addEventListener('shaka-ui-loaded', init);
+        document.addEventListener('shaka-ui-load-failed', initFailed);
+    </script>
+ 
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+</html>
