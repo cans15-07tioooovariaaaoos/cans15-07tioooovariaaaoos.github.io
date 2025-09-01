@@ -1,0 +1,137 @@
+ <style>
+      /* Estilo para el fondo */
+      body {
+        background-color: #05081c;
+      }
+ </style>
+    <meta name="robots" content="noindex" />
+    <script src="//cdn.jsdelivr.net/npm/@clappr/player@0.4.0/dist/clappr.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/mux.js@5.6.7/dist/mux.min.js"></script>
+    <script src='//cdn.jsdelivr.net/npm/level-selector@latest/dist/level-selector.min.js'></script>
+    <script src='//cdn.jsdelivr.net/npm/clappr-pip@latest/dist/clappr-pip.min.js'></script>
+    <script
+        src='//cdn.jsdelivr.net/npm/clappr-playback-rate-plugin@latest/dist/clappr-playback-rate-plugin.min.js'></script>
+    <script src="//cdn.jsdelivr.net/npm/shaka-player@2.5.10/dist/shaka-player.compiled.min.js"></script>
+    <script
+        src="//cdn.jsdelivr.net/gh/clappr/dash-shaka-playback@latest/dist/dash-shaka-playback.external.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/cdnbye-shaka@latest"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+   <style> 
+.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {
+    height: 5px !important; }.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] {
+    height: 7px !important;}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {
+    background-color: red !important;}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {background-color: rgba(255, 255, 255, 0.2) !important; }
+.player-poster[data-poster] {
+  background-size: cover;
+}
+body{
+  margin:0;
+  padding:0;
+}
+
+</style>
+</head>
+
+<body>
+    <div id="player"></div>
+
+  
+    <script>
+
+        function getUrlParameter(name) {
+            var result = null;
+            var regex = new RegExp('[?&]' + name + '=([^&#]*)', 'i');
+            var match = window.location.search.match(regex);
+            if (match) {
+                result = decodeURIComponent(match[1]);
+            }
+            return result;
+        }
+
+        var id = getUrlParameter('id');
+
+        var source = '';
+        var clearKeys = {};
+
+        if (id === 'foopremeje-niiitoop2') {
+            source = 'https://ottb.live.cf.ww.aiv-cdn.net/iad-nitro/live/clients/dash/enc/fdx74zqzhu/out/v1/7d7a8c6981a842b98a683e9fbfe51d17/cenc.mpd';
+            clearKeys = {
+             
+                "9f327d24c66fbd84e15ab5c9ead7c7a4": "83837185529c0c4048f81386c2d36426"
+            };
+        } else if (id === 'tiiooesp2') {
+            source = 'https://d3kzwqwnq1f7tq.cloudfront.net/out/v1/25ca218d53194065bedf6d998ace462e/index.mpd';
+            clearKeys = {
+                "1c62a216a5fe423f959cb1ca02f62d83": "54f2fdc83c1da33cd9269bf21e08218c"
+            };
+        } else if (id === 'tiiooesp3') {
+            source = 'https://d2slu3qf332d0d.cloudfront.net/out/v1/c2cc7832b5b64aedacb0e459fd9d8398/index.mpd';
+            clearKeys = {
+               "2245f48a5998442f835099d30f2e0305": "f48f6ce816fe86d8c10587e9a7e927a3"
+              
+            };
+          
+           } else if (id === 'tiiooespeviooo1') {
+            source = 'https://sam-py-edge05.tigo.com.py/VMX4_widevine/rolling-buffer/TigoSportsHD/TigoSportsHD/transmux/index.mpd';
+            clearKeys = {
+               "b52a7fa91fb031a3d6f2a505414b6fcd": "a655a22f9c0a66574b5d95dee212fbf9"
+              
+            };
+         } else if (id === 'tiiooespeviooo2') {
+            source = 'https://sam-py-edge05.tigo.com.py/VMX4_widevine/rolling-buffer/TigoSportsPlusHD/TigoSportsPlusHD/transmux/index.mpd';
+            clearKeys = {
+               "a8d8bfb76315e4fc6ba1328e1d8870bd": "eb27c40de4c406980e473fb6233fc897"
+              
+            }; 
+           } else if (id === 'tiiooespeviooo3') {
+            source = 'https://sam-py-edge05.tigo.com.py/VMX4_widevine/rolling-buffer/TigoSports3HDPY/TigoSports3HDPY/transmux/index.mpd';
+            clearKeys = {
+              "f62e93559765dfa6a89d2842b2b6d64a": "9f6a8cf0bcb1d17ce79ea93d0d9c3d83"
+              
+            }; 
+           
+           
+        } 
+         else {
+            alert('No se encontró un ID válido.');
+        }
+        var player = new Clappr.Player({
+            // description: "canalesonline.netlify.app",
+            source: source,
+            mimeType: 'application/dash+xml',
+            height: '100%',
+            width: '100%',
+            mute: false,
+            poster: '', // Puedes reemplazar con la URL de un póster si lo necesitas
+            autoPlay: false, // Activar reproducción automática
+            plugins: [
+                LevelSelector,
+                DashShakaPlayback,
+                ClapprPip.PipButton,
+                ClapprPip.PipPlugin,
+                Clappr.MediaControl,
+                Clappr.Poster
+            ],
+            events: {
+                // onReady: function() {
+                //     var plugin = this.getPlugin('click_to_pause'); 
+                //     if (plugin) {
+                //         plugin.disable(); // Desactivar clic para pausar
+                //     }
+                // },
+            },
+            chromecast: {
+                appId: '#',
+                contentType: 'video/mp4',
+            },
+            shakaConfiguration: {
+                drm: {
+                    clearKeys: clearKeys
+                },
+            },
+            shakaOnBeforeLoad: function (shaka_player) { },
+            parentId: '#player'
+        });
+
+    </script>
