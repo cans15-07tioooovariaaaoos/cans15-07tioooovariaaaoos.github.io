@@ -318,8 +318,104 @@ body {
 .jw-reset-text{
     color: white !important;
 }
-</style>
-    <script src="//ssl.p.jwpcdn.com/player/v/8.27.0/jwplayer.js"></script>
+
+    #player {
+      width: 100%;
+      max-width: 800px;
+      margin: auto;
+      background-color: #000;
+      box-shadow: 0 0 10px rgba(0,0,0,0.6);
+      position: relative;
+    }
+
+    .jwplayer {
+      color: #fff !important;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* ===============================
+       CONTROLBAR NATIVA ABAJO
+       =============================== */
+    .jw-controlbar {
+      background-color: rgba(20, 20, 20, 0.85) !important;
+      border-top: 1px solid #333;
+    }
+
+    /* ===============================
+       BOTONES VISUALMENTE ARRIBA
+       =============================== */
+    .jw-controlbar .jw-button-container {
+      position: absolute !important;
+      top: -46px;
+      left: 0;
+      right: 0;
+      height: 46px;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.85),
+        rgba(0,0,0,0.35)
+      );
+      border-bottom: 1px solid #333;
+      padding: 4px 8px;
+      z-index: 10;
+    }
+
+    /* Espacio para que no tape el video */
+    .jwplayer video {
+      margin-top: 46px;
+    }
+
+    .jw-button-color {
+      color: #ccc !important;
+    }
+
+    .jw-button-color:hover {
+      color: #FFD120 !important;
+    }
+
+    .jw-icon {
+      filter: brightness(1.4);
+    }
+
+    .jw-time {
+      color: #eee !important;
+      font-size: 12px;
+    }
+
+    .jw-text-track-display {
+      background-color: rgba(0,0,0,0.6);
+      color: #fff;
+      font-size:16px;
+      font-family:'Segoe UI',sans-serif;
+    }
+
+    .jw-title {
+      color: #ddd !important;
+    }
+
+    .jw-display-icon-container {
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .ios-landscape {
+      transform: rotate(90deg);
+      transform-origin: center center;
+      width: 100vh !important;
+      height: 100vw !important;
+      position: fixed !important;
+      top: 0;
+      left: 0;
+      background: #000;
+      z-index: 9999;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div id="player" allow="fullscreen; screen-orientation-lock"></div>
+    <script src="//ssl.p.jwpcdn.com/player/v/8.40.5/jwplayer.js"></script>
     <script>jwplayer.key = "XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo";</script>
 
     <style>
@@ -344,9 +440,9 @@ body {
         var ConfiguracionCanales = {
       //DEPORTSS
           "tiioo1": {
-                url: "//d2jluxxgx550su.cloudfront.net/out/v1/62de20495af84f908fa8963f50c44d46/index.mpd",
-                k1: "49b2c0e7037042b2aff9f064e0bb3311",
-                k2: "83849e30adf85440550292693147fbf7"
+                url: "https://chromecast.cvattv.com.ar/live/c7eds/Fox_Sports_Premiun_HD/SA_Live_dash_enc_C/Fox_Sports_Premiun_HD.mpd",
+                k1: "4c230dbc7f6a4bfa6ad0aa73ff792374",
+                k2: "4186a7c2a15f590a9399886feaec4257"
             },
             "tiioo2": {
                 url: "//d3kzwqwnq1f7tq.cloudfront.net/out/v1/25ca218d53194065bedf6d998ace462e/index.mpd",
@@ -411,28 +507,90 @@ description: "EN VIVO",
         aspectratio: "16:9",
           autostart: false,
         stretching: "exactfit",
-       skin: {
-           name: "bekle",
-       active: "red",
-       inactive: " ",
-       background: ""
-    }
-       }
-       );
-       
-		jwplayer("player").on("play", function(e){jwplayer("player").setCurrentAudioTrack(1)});
-  }
-   
+     preload: "auto",
 
-    if (!/SmartTV|Tizen|Web0S|SmartHub|Chromecast/i.test(navigator.userAgent)) {
-        // Esperar a que el reproductor esté listo
-        jwplayer("player").on("ready", function () {
-            var videoElement = document.querySelector("#player video");
-            if (videoElement) {
-                var audioContext = new (window.AudioContext || window.webkitAudioContext)();
-           
-            }
-        });
+    live: {
+      dvrSeekLimit: 3600,
+      edgeMargin: 5
+    },
+
+    dash: {
+      bufferLength: 1,
+      maxBufferLength: 1
+    },
+
+    displaytitle: true,
+    displaydescription: false
+  });
+
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isSmartTV = /SmartTV|Tizen|Web0S|SmartHub|Chromecast/i.test(navigator.userAgent);
+
+  if (!isSmartTV) {
+    player.on("play", function () {
+      const video = document.querySelector("#player video");
+      if (video && !video.audioBoostApplied) {
+        try {
+          const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const source = audioCtx.createMediaElementSource(video);
+          const gain = audioCtx.createGain();
+          gain.gain.value = 5;
+          source.connect(gain);
+          gain.connect(audioCtx.destination);
+          video.muted = false;
+          video.volume = 1.0;
+          video.audioBoostApplied = true;
+        } catch(e) { console.warn("Audio boost no disponible:", e); }
+      }
+    });
+  }
+
+  if (isSmartTV) {
+    player.on("ready", function () {
+      const video = document.querySelector("#player video");
+      if (video) {
+        video.muted = false;
+        try { video.volume = 1.0; } catch(e){}
+      }
+    });
+  }
+
+  const lang = 1;
+  player.on("play", () => player.setCurrentAudioTrack(lang));
+
+  player.on("fullscreen", function(e) {
+    const contenedor = document.getElementById("player");
+
+    if (!isIOS && screen.orientation) {
+      if (e.fullscreen) {
+        const tryLock = async () => {
+          try { await screen.orientation.lock("landscape"); }
+          catch(err) { setTimeout(tryLock, 200); }
+        };
+        tryLock();
+      } else {
+        try { screen.orientation.unlock(); } catch(err) {}
+      }
     }
-  </script>
+
+    if (isIOS) {
+      if (e.fullscreen) contenedor.classList.add("ios-landscape");
+      else contenedor.classList.remove("ios-landscape");
+    }
+  });
+
+  player.on("buffer", function() {
+    try { player.setCurrentQuality(0); } catch(e){}
+  });
+
+  player.on("ready", () => {
+    const latency = player.getLiveLatency?.();
+    console.log("Latencia / DVR:", latency, "segundos");
+  });
+}
+
+window.onload = iniciarReproductor;
+</script>
+
+</body>
 </html>
