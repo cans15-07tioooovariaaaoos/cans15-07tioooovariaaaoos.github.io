@@ -318,7 +318,88 @@ body {
 .jw-reset-text{
     color: white !important;
 }
+   .jwplayer {
+      color: #fff !important;
+      font-family: 'Segoe UI', sans-serif;
+    }
+ /* ===============================
+       CONTROLBAR NATIVA ABAJO
+       =============================== */
+    .jw-controlbar {
+      background-color: rgba(0,0,0) !important;
+      border-top: 1px solid #333;
+    }
 
+    /* ===============================
+       BOTONES VISUALMENTE ARRIBA
+       =============================== */
+    .jw-controlbar .jw-button-container {
+      position: absolute !important;
+      top: -46px;
+      left: 0;
+      right: 0;
+      height: 46px;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0),
+        rgba(0,0,0,0.35)
+      );
+      border-bottom: 1px solid #333;
+      padding: 4px 8px;
+      z-index: 10;
+    }
+
+    /* Espacio para que no tape el video */
+    .jwplayer video {
+      margin-top: 46px;
+    }
+
+
+    .jw-button-color {
+      color:  #00FFFF !important;
+    }
+
+    .jw-button-color:hover {
+      color: #FFD120 !important;
+    }
+
+    .jw-icon {
+      filter: brightness(1.4);
+    }
+
+    .jw-time {
+      color: #eee !important;
+      font-size: 12px;
+    }
+
+    .jw-text-track-display {
+      background-color: rgba(0,0,0,0.6);
+      color: #fff;
+      font-size:16px;
+      font-weight:bold;
+      font-family:'Segoe UI',sans-serif;
+    }
+
+    .jw-title {
+      color: #ddd !important;
+      font-weight:bold;
+    }
+
+    .jw-display-icon-container {
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .ios-landscape {
+      transform: rotate(90deg);
+      transform-origin: center center;
+      width: 100vh !important;
+      height: 100vw !important;
+      position: fixed !important;
+      top: 0;
+      left: 0;
+      background: #000;
+      z-index: 9999;
+    }
 
 </style>
 </head>
