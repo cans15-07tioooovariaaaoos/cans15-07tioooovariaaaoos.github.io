@@ -396,16 +396,7 @@ aspectratio: "16:9",
     }
   });
 
-  // --- Baja de calidad si hay buffering
-  player.on("buffer", function() {
-    try { player.setCurrentQuality(); } catch(e){}
-  });
-
-  // --- Log de DVR
-  player.on("ready", () => {
-    const latency = player.getLiveLatency?.();
-    console.log("Latencia / DVR:", latency, "segundos");
-  });
+ 
 }
 
 window.onload = iniciarReproductor;
