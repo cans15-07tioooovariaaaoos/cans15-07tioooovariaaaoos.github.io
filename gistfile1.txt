@@ -1,8 +1,8 @@
 {
   "partidos": [
     {
-      "fecha": 10,
-      "dia": "2026-03-13",
+     "jornada": 10,
+      "fecha": "2026-03-13",
       "hora": "18:30",
       "local": "Sp. Luqueño",
       "visitante": "San Lorenzo",
