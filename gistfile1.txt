@@ -9,51 +9,19 @@
       "torneo": "Torneo Apertura 2026"
     },
     {
-      "jornada": 10,
-      "fecha": "2026-03-13",
+      "fecha": 10,
+      "dia": "2026-03-13",
       "hora": "20:30",
       "local": "2 de Mayo",
       "visitante": "Libertad",
       "torneo": "Torneo Apertura 2026"
     },
     {
-      "jornada": 10,
-      "fecha": "2026-03-14",
+      "fecha": 10,
+      "dia": "2026-03-14",
       "hora": "18:30",
       "local": "Recoleta",
       "visitante": "Olimpia",
-      "torneo": "Torneo Apertura 2026"
-    },
-    {
-      "jornada": 10,
-      "fecha": "2026-03-14",
-      "hora": "20:30",
-      "local": "Cerro Porteño",
-      "visitante": "Sportivo Trinidense",
-      "torneo": "Torneo Apertura 2026"
-    },
-    {
-      "jornada": 10,
-      "fecha": "2026-03-15",
-      "hora": "18:30",
-      "local": "Nacional Asunción",
-      "visitante": "Rubio Ñú",
-      "torneo": "Torneo Apertura 2026"
-    },
-    {
-      "jornada": 10,
-      "fecha": "2026-03-15",
-      "hora": "20:30",
-      "local": "S. Ameliano",
-      "visitante": "Guaraní",
-      "torneo": "Torneo Apertura 2026"
-    },
-    {
-      "jornada": 11,
-      "fecha": "2026-03-17",
-      "hora": "18:30",
-      "local": "San Lorenzo",
-      "visitante": "2 de Mayo",
       "torneo": "Torneo Apertura 2026"
     }
   ]
